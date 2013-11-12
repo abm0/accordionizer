@@ -16,8 +16,6 @@
 				containerClassName: '',
 				// instanceClassName: core.getInstanceClassName(core.data.$container),
 				instanceClassName: '',
-				idMin: 0,
-				idMax: 99999
 			},
 
 			parsedDOM: {
@@ -61,7 +59,7 @@
 			 * Проверяем полученный класс на уникальность
 			 */
 
-			//TODO: Придумать реализовать рабочую проверку на уникальность -----
+			//TODO: Реализовать рабочую проверку на уникальность -----
 			getInstanceClassName: function($container) {
 				// while($('body').find('.' + className).length) {
 				// 	var className = core.buildInstanceClassName($container);
@@ -75,7 +73,7 @@
 			 */
 
 			generateInstanceId: function() {
-				return Math.floor(Math.random() * (core.data.idMax - core.data.idMin + 1)) + core.data.idMin;
+				return Math.floor(Math.random() * (99999 - 0 + 1)) + 0;
 
 			},
 
