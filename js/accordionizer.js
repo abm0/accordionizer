@@ -5,14 +5,14 @@
 				tabWidth: 80,
 				scroll: {
 					timeout: 7000,
-					auto: true,
+					auto: true
 				},
 				classPrefix: 'accordionized'
 			}, options),
 
 			// TODO: Рефакторинг получения названий сущности плагина и класса конейнера -----
 			data: {
-				// containerClassName: core.getContainerClassName(core.data.$container), 
+				// containerClassName: core.getContainerClassName(core.data.$container),
 				containerClassName: '',
 				// instanceClassName: core.getInstanceClassName(core.data.$container),
 				instanceClassName: '',
@@ -25,7 +25,6 @@
 					alt: [],
 					count: 0
 				}
-
 			},
 			// TODO: Рефакторинг получения названий сущности плагина и класса конейнера -----
 			writeContainerNamesData: function($container){
@@ -99,14 +98,13 @@
 			/**
 			 * Инициализация плагина
 			 */
-			
+
 			// TODO: Рефакторинг -------------------------------------------
 			init: function($container, defaultOptions, externalOptions) {
 				core.writeContainerNamesData($container);
 				core.parse($container);
 				core.setEvents($container);
 				$container.children('.banner-item').first().trigger('mousedown');
-				
 			},
 
 			/**
@@ -142,7 +140,7 @@
 						tagName = core.parsedDOM.elements.tagName[i],
 						$wrapper = $('<div />',{
 							'class': 'banner-item',
-							'data-title': title 
+							'data-title': title
 						}),
 						$overlay = $('<div />', {
 							'class': 'banner-item-overlay',
@@ -168,7 +166,7 @@
 			},
 
 			/**
-			 * Прикручиваем анимацию 
+			 * Прикручиваем анимацию
 			 */
 
 			 //TODO: Рефакторинг ----------------------------------------------
@@ -190,7 +188,7 @@
 						} else {
 							return false;
 						}
-					});	
+					});
 
 					$container.append($(this));
 				});
