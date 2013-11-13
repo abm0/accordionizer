@@ -1,252 +1,252 @@
 (function($){
-	$.fn.accordionize = function(options) {
-		var core = {
-			defaultOptions: $.extend({
-				tabWidth: 80,
-				scroll: {
-					timeout: 7000,
-					auto: true
-				},
-				classPrefix: 'accordionized'
-			}, options),
+  $.fn.accordionize = function(options) {
+    var core = {
+      defaultOptions: $.extend({
+        tabWidth: 80,
+        scroll: {
+          timeout: 7000,
+          auto: true
+        },
+        classPrefix: 'accordionized'
+      }, options),
 
-			// TODO: Рефакторинг получения названий сущности плагина и класса конейнера -----
-			data: {
-				// containerClassName: core.getContainerClassName(core.data.$container),
-				containerClassName: '',
-				// instanceClassName: core.getInstanceClassName(core.data.$container),
-				instanceClassName: '',
-			},
+      // TODO: Рефакторинг получения названий сущности плагина и класса конейнера -----
+      data: {
+        // containerClassName: core.getContainerClassName(core.data.$container),
+        containerClassName: '',
+        // instanceClassName: core.getInstanceClassName(core.data.$container),
+        instanceClassName: '',
+      },
 
-			parsedDOM: {
-				elements: {
-					tagName: [],
-					src: [],
-					alt: [],
-					count: 0
-				}
-			},
-			// TODO: Рефакторинг получения названий сущности плагина и класса конейнера -----
-			writeContainerNamesData: function($container){
-				core.data.containerClassName = core.getContainerClassName($container);
-				core.data.instanceClassName = core.getInstanceClassName($container);
-			},
+      parsedDOM: {
+        elements: {
+          tagName: [],
+          src: [],
+          alt: [],
+          count: 0
+        }
+      },
+      // TODO: Рефакторинг получения названий сущности плагина и класса конейнера -----
+      writeContainerNamesData: function($container){
+        core.data.containerClassName = core.getContainerClassName($container);
+        core.data.instanceClassName = core.getInstanceClassName($container);
+      },
 
-			/**
-			 * Получаем класс контейнера
-			 */
+      /**
+       * Получаем класс контейнера
+       */
 
-			getContainerClassName: function($container) {
-				return $container.attr('class');
-			},
+      getContainerClassName: function($container) {
+        return $container.attr('class');
+      },
 
-			/**
-			 * Собираем класс для текущей сущности плагина
-			 */
+      /**
+       * Собираем класс для текущей сущности плагина
+       */
 
-			buildInstanceClassName: function($container) {
-				var className = {
-						prefix: core.defaultOptions.classPrefix,
-						id: core.generateInstanceId(),
-						postfix: '__' + core.getContainerClassName($container)
-					}
+      buildInstanceClassName: function($container) {
+        var className = {
+            prefix: core.defaultOptions.classPrefix,
+            id: core.generateInstanceId(),
+            postfix: '__' + core.getContainerClassName($container)
+          }
 
-				return className.prefix + className.id + className.postfix;
-			},
+        return className.prefix + className.id + className.postfix;
+      },
 
-			/**
-			 * Проверяем полученный класс на уникальность
-			 */
+      /**
+       * Проверяем полученный класс на уникальность
+       */
 
-			//TODO: Реализовать рабочую проверку на уникальность -----
-			getInstanceClassName: function($container) {
-				// while($('body').find('.' + className).length) {
-				// 	var className = core.buildInstanceClassName($container);
-				// }
+      //TODO: Реализовать рабочую проверку на уникальность -----
+      getInstanceClassName: function($container) {
+        // while($('body').find('.' + className).length) {
+        //   var className = core.buildInstanceClassName($container);
+        // }
 
-				return core.buildInstanceClassName($container);
-			},
+        return core.buildInstanceClassName($container);
+      },
 
-			/**
-			 * Генерируем ID для текущей сущности
-			 */
+      /**
+       * Генерируем ID для текущей сущности
+       */
 
-			generateInstanceId: function() {
-				return Math.floor(Math.random() * (99999 - 0 + 1)) + 0;
+      generateInstanceId: function() {
+        return Math.floor(Math.random() * (99999 - 0 + 1)) + 0;
 
-			},
+      },
 
-			/**
-			 * Устанавливаем автоматическую прокрутку
-			 */
+      /**
+       * Устанавливаем автоматическую прокрутку
+       */
 
-			setLoop: function($container) {
-				if(core.defaultOptions.scroll.auto) {
-					clearInterval(window.interval);
+      setLoop: function($container) {
+        if(core.defaultOptions.scroll.auto) {
+          clearInterval(window.interval);
 
-					window.interval = setInterval(function() {
-						var $activeElement = $container.children('.active');
-						if($activeElement.is(':last-child')) {
-							$container.children('.banner-item:first-child').trigger('mousedown');
-						} else {
-							$activeElement.next().trigger('mousedown');
-						}
-					}, core.defaultOptions.scroll.timeout);
-				}
-			},
+          window.interval = setInterval(function() {
+            var $activeElement = $container.children('.active');
+            if($activeElement.is(':last-child')) {
+              $container.children('.banner-item:first-child').trigger('mousedown');
+            } else {
+              $activeElement.next().trigger('mousedown');
+            }
+          }, core.defaultOptions.scroll.timeout);
+        }
+      },
 
-			/**
-			 * Инициализация плагина
-			 */
+      /**
+       * Инициализация плагина
+       */
 
-			// TODO: Рефакторинг -------------------------------------------
-			init: function($container, defaultOptions, externalOptions) {
-				core.writeContainerNamesData($container);
-				core.parse($container);
-				core.setEvents($container);
-				$container.children('.banner-item').first().trigger('mousedown');
-			},
+      // TODO: Рефакторинг -------------------------------------------
+      init: function($container, defaultOptions, externalOptions) {
+        core.writeContainerNamesData($container);
+        core.parse($container);
+        core.setEvents($container);
+        $container.children('.banner-item').first().trigger('mousedown');
+      },
 
-			/**
-			 *  Парсим DOM элементы, находящиеся в контейнере
-			 */
+      /**
+       *  Парсим DOM элементы, находящиеся в контейнере
+       */
 
-			parse: function($container) {
-				var images = $container.find('img');
+      parse: function($container) {
+        var images = $container.find('img');
 
-				for (var i = 0; i < images.length; i++) {
-					var $element = $(images[i]),
-						tagName = $element.prop('tagName'),
-						src = $element.attr('src'),
-						alt = $element.attr('alt');
+        for (var i = 0; i < images.length; i++) {
+          var $element = $(images[i]),
+            tagName = $element.prop('tagName'),
+            src = $element.attr('src'),
+            alt = $element.attr('alt');
 
-					core.parsedDOM.elements.tagName.push(tagName);
-					core.parsedDOM.elements.src.push(src);
-					core.parsedDOM.elements.alt.push(alt);
-					core.parsedDOM.elements.count++;
-				}
-				images.remove();
-			},
+          core.parsedDOM.elements.tagName.push(tagName);
+          core.parsedDOM.elements.src.push(src);
+          core.parsedDOM.elements.alt.push(alt);
+          core.parsedDOM.elements.count++;
+        }
+        images.remove();
+      },
 
-			/**
-			 * Собираем новую DOM структуру
-			 */
+      /**
+       * Собираем новую DOM структуру
+       */
 
-			build: function() {
-				var builtElements = [];
-				for(var i = 0; i < core.parsedDOM.elements.count; i++) {
-					var title = core.parsedDOM.elements.alt[i],
-						src = core.parsedDOM.elements.src[i],
-						tagName = core.parsedDOM.elements.tagName[i],
-						$wrapper = $('<div />',{
-							'class': 'banner-item',
-							'data-title': title
-						}),
-						$overlay = $('<div />', {
-							'class': 'banner-item-overlay',
-							'html': title
-						}),
-						$label = $('<div />', {
-							'class': 'banner-item-label',
-							'html': title
-						}),
-						$image = $('<img />', {
-							'src': src,
-							'alt': title
-						});
+      build: function() {
+        var builtElements = [];
+        for(var i = 0; i < core.parsedDOM.elements.count; i++) {
+          var title = core.parsedDOM.elements.alt[i],
+            src = core.parsedDOM.elements.src[i],
+            tagName = core.parsedDOM.elements.tagName[i],
+            $wrapper = $('<div />',{
+              'class': 'banner-item',
+              'data-title': title
+            }),
+            $overlay = $('<div />', {
+              'class': 'banner-item-overlay',
+              'html': title
+            }),
+            $label = $('<div />', {
+              'class': 'banner-item-label',
+              'html': title
+            }),
+            $image = $('<img />', {
+              'src': src,
+              'alt': title
+            });
 
-					$wrapper
-						.append($overlay)
-						.append($label)
-						.append($image);
+          $wrapper
+            .append($overlay)
+            .append($label)
+            .append($image);
 
-					builtElements.push($wrapper);
-				}
-				return $(builtElements);
-			},
+          builtElements.push($wrapper);
+        }
+        return $(builtElements);
+      },
 
-			/**
-			 * Прикручиваем анимацию
-			 */
+      /**
+       * Прикручиваем анимацию
+       */
 
-			 //TODO: Рефакторинг ----------------------------------------------
-			setEvents: function($container) {
-				var $this = $(this),
-					$elements = core.build(),
-					slideWidth = $container.width() - (core.defaultOptions.tabWidth + 1) * (core.parsedDOM.elements.count - 1) - 1;
+       //TODO: Рефакторинг ----------------------------------------------
+      setEvents: function($container) {
+        var $this = $(this),
+          $elements = core.build(),
+          slideWidth = $container.width() - (core.defaultOptions.tabWidth + 1) * (core.parsedDOM.elements.count - 1) - 1;
 
-				$elements.each(function(){
-					$(this).on('mousedown', function(){
-						var $this = $(this);
-						if(!$this.is('.active')) {
-							if($container.attr('data-animated') != 'true') {
-								$container.attr('data-animated', 'true');
-								core.wrap($container, $this.siblings('.active'));
-								core.unwrap($container, $this, slideWidth);
-								core.setLoop($container);
-							}
-						} else {
-							return false;
-						}
-					});
+        $elements.each(function(){
+          $(this).on('mousedown', function(){
+            var $this = $(this);
+            if(!$this.is('.active')) {
+              if($container.attr('data-animated') != 'true') {
+                $container.attr('data-animated', 'true');
+                core.wrap($container, $this.siblings('.active'));
+                core.unwrap($container, $this, slideWidth);
+                core.setLoop($container);
+              }
+            } else {
+              return false;
+            }
+          });
 
-					$container.append($(this));
-				});
-				$container.addClass(core.data.instanceClassName);
-			},
+          $container.append($(this));
+        });
+        $container.addClass(core.data.instanceClassName);
+      },
 
-			/**
-			 * Анимация разворачивания
-			 */
+      /**
+       * Анимация разворачивания
+       */
 
-			unwrap: function($container, $slide, slideWidth) {
-				setTimeout(function(){
-					$slide
-						.animate({
-							'width': slideWidth + 'px'
-						}, 400, function(){
-							$container.attr('data-animated', 'false');
-						})
-						.addClass('active');
+      unwrap: function($container, $slide, slideWidth) {
+        setTimeout(function(){
+          $slide
+            .animate({
+              'width': slideWidth + 'px'
+            }, 400, function(){
+              $container.attr('data-animated', 'false');
+            })
+            .addClass('active');
 
-					$slide
-						.find('.banner-item-overlay')
-						.fadeOut(400);
+          $slide
+            .find('.banner-item-overlay')
+            .fadeOut(400);
 
-					setTimeout(function(){
-						$slide
-							.find('.banner-item-label')
-							.fadeIn(300);
-					}, 400)
-				}, 300);
+          setTimeout(function(){
+            $slide
+              .find('.banner-item-label')
+              .fadeIn(300);
+          }, 400)
+        }, 300);
 
-			},
+      },
 
-			/**
-			 * Анимация сворачивания
-			 */
+      /**
+       * Анимация сворачивания
+       */
 
-			wrap: function($container, $slide) {
-				setTimeout(function(){
-					$slide
-						.animate({
-							'width': core.defaultOptions.tabWidth + 'px'
-						}, 400, function(){
-							$container.attr('data-animated', 'false');
-						})
-						.removeClass('active');
+      wrap: function($container, $slide) {
+        setTimeout(function(){
+          $slide
+            .animate({
+              'width': core.defaultOptions.tabWidth + 'px'
+            }, 400, function(){
+              $container.attr('data-animated', 'false');
+            })
+            .removeClass('active');
 
-					$slide
-						.find('.banner-item-overlay')
-						.fadeIn(400);
-				}, 300);
+          $slide
+            .find('.banner-item-overlay')
+            .fadeIn(400);
+        }, 300);
 
-				$slide
-					.find('.banner-item-label')
-					.fadeOut(300);
-			}
- 		}
+        $slide
+          .find('.banner-item-label')
+          .fadeOut(300);
+      }
+     }
 
-		core.init(this, core.defaultOptions, options);
-	}
+    core.init(this, core.defaultOptions, options);
+  }
 })(jQuery);
