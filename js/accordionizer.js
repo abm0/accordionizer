@@ -32,6 +32,47 @@
         core.data.instanceClassName = core.getInstanceClassName($container);
       },
 
+      grayscale: {
+        createCanvas: function($container) {
+          var $images = $container.find('img');
+
+          $images.each(function(){
+            var $image = $(this),
+              imgWidth = $image.width(),
+              imgHeight = $image.height(),
+              imgName = $image.attr('alt'),
+              $canvas = $('<canvas />')
+                .attr({
+                  'width': imgWidth,
+                  'height': imgHeight,
+                  'data-rel': imgName
+                })
+                .css({
+                  position: 'absolute'
+                });
+
+            var context = $canvas.get(0).getContext('2d');
+
+            context.drawImage($image.get(0), 0, 0);
+
+            var imageData = context.getImageData(0, 0, imgWidth, imgHeight),
+              pix = imageData.data;
+
+            for (var i = 0; i < pix.length; i += 4) {
+              var grayscale = pix[i] * .3 + pix[i+1] * .59 + pix[i+2] * .11;
+
+              pix[i] = grayscale;
+              pix[i+1] = grayscale;
+              pix[i+2] = grayscale;
+            }
+
+            context.putImageData(imageData, 0, 0);
+            $canvas.insertAfter($image);
+          });
+              
+        }
+      },
+
       /**
        * Получаем класс контейнера
        */
@@ -103,6 +144,8 @@
       init: function($container, defaultOptions, externalOptions) {
         core.writeContainerNamesData($container);
         core.parse($container);
+        core.buildDOM($container);
+        core.grayscale.createCanvas($container);
         core.setEvents($container);
         $container.children('.banner-item').first().trigger('mousedown');
       },
@@ -132,7 +175,7 @@
        * Собираем новую DOM структуру
        */
 
-      build: function() {
+      buildDOM: function($container) {
         var builtElements = [];
         for(var i = 0; i < core.parsedDOM.elements.count; i++) {
           var title = core.parsedDOM.elements.alt[i],
@@ -155,6 +198,12 @@
               'alt': title
             });
 
+          $image.css({
+            'position': 'absolute',
+            'display': 'none',
+            'z-index': '1'
+          });
+
           $wrapper
             .append($overlay)
             .append($label)
@@ -162,7 +211,9 @@
 
           builtElements.push($wrapper);
         }
-        return $(builtElements);
+        // $(builtElements).appendTo($container);
+        $container.append(builtElements);
+        // $container.addClass(core.data.instanceClassName);
       },
 
       /**
@@ -171,8 +222,7 @@
 
        //TODO: Рефакторинг ----------------------------------------------
       setEvents: function($container) {
-        var $this = $(this),
-          $elements = core.build(),
+        var $elements = $container.find('.banner-item'),
           slideWidth = $container.width() - (core.defaultOptions.tabWidth + 1) * (core.parsedDOM.elements.count - 1) - 1;
 
         $elements.each(function(){
@@ -189,10 +239,7 @@
               return false;
             }
           });
-
-          $container.append($(this));
         });
-        $container.addClass(core.data.instanceClassName);
       },
 
       /**
@@ -217,6 +264,14 @@
             $slide
               .find('.banner-item-label')
               .fadeIn(300);
+
+            // $slide
+            //   .find('canvas')
+            //   .fadeOut(300);
+
+            $slide
+              .find('img')
+              .fadeIn(300);
           }, 400)
         }, 300);
 
@@ -236,9 +291,21 @@
             })
             .removeClass('active');
 
-          $slide
-            .find('.banner-item-overlay')
-            .fadeIn(400);
+          
+          setTimeout(function(){
+            // $slide
+            //   .find('canvas')
+            //   .fadeIn(300);
+
+            $slide
+              .find('img')
+              .fadeOut(300);
+
+            $slide
+              .find('.banner-item-overlay')
+              .fadeIn(400); 
+          }, 400);
+          
         }, 300);
 
         $slide

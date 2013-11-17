@@ -59,12 +59,12 @@ body {
 
 .main-container .main-banner .banner-item:not(.active) img {
     margin: 0 auto;
-    filter: grayscale(100%);
+/*    filter: grayscale(100%);
     -webkit-filter: grayscale(100%); -moz-filter: grayscale(100%);
     -ms-filter: grayscale(100%); -o-filter: grayscale(100%);
-    /*filter: url(#greyscale);*/
+    filter: url(#greyscale);
     filter: gray;
-    -webkit-filter: grayscale(1);
+    -webkit-filter: grayscale(1);*/
 }
 
 .main-container .main-banner .banner-item .banner-item-overlay {
@@ -111,6 +111,7 @@ body {
     font-size: 58px;
     text-transform: uppercase;
     display: none;
+    z-index: 2;
     /*-webkit-font-smoothing: antialiased;*/
     /*text-shadow: 1px 1px 1px rgba(255,255,255,0.004);*/
 }
