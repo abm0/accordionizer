@@ -35,7 +35,7 @@
 
       grayscale: {
         createCanvas: function($container) {
-          var $images = $container.find('img');
+          var $images = $container.find(tagImg);
 
           $images.each(function(){
             var $image = $(this),
@@ -216,7 +216,7 @@
               .find('.banner-item-label')
               .fadeIn(300);
             $slide
-              .find('img')
+              .find(tagImg)
               .fadeIn(300);
           }, 400)
         }, 300);
@@ -236,7 +236,7 @@
 
           setTimeout(function(){
             $slide
-              .find('img')
+              .find(tagImg)
               .fadeOut(300);
 
             $slide
