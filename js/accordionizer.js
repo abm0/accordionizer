@@ -40,7 +40,7 @@
             var $image = $(this),
               imgWidth = $image.width(),
               imgHeight = $image.height(),
-              imgName = $image.attr('alt'),
+              imgName = $image.attr(attrAlt),
               $canvas = $('<canvas />')
                 .attr({
                   'width': imgWidth,
@@ -148,7 +148,7 @@
             }),
             $image = $('<img />', {
               'src': src,
-              'alt': title
+              attrAlt: title
             });
 
           $image.css({
