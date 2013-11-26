@@ -29,7 +29,7 @@
 
       writeContainerNamesData: function($container){
         core.data.containerClassName = $container.attr(attrClass);
-        core.data.instanceClassName = core.getInstanceClassName($container);
+        core.data.instanceClassName = core.buildInstanceClassName($container);
       },
 
       grayscale: {
@@ -79,10 +79,6 @@
           }
 
         return className.prefix + className.id + className.postfix;
-      },
-
-      getInstanceClassName: function($container) {
-        return core.buildInstanceClassName($container);
       },
 
       generateInstanceId: function() {
