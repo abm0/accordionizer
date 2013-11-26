@@ -1,15 +1,5 @@
 (function($){
   $.fn.accordionize = function(options) {
-    function AccordionizeNode(accordionizeNode) {
-      $.extend(this, accordionizeNode);
-    }
-
-    var propTagName = "tagName";
-    var attrSrc = "src";
-    var attrAlt = "alt";
-    var tagImg = "img";
-    var attrClass = "class";
-
     var core = {
       defaultOptions: $.extend({
         tabWidth: 80,
@@ -245,4 +235,13 @@
 
     core.init(this, core.defaultOptions, options);
   }
+  function AccordionizeNode(accordionizeNode) {
+    $.extend(this, accordionizeNode);
+  }
+
+  var propTagName = "tagName";
+  var attrSrc = "src";
+  var attrAlt = "alt";
+  var tagImg = "img";
+  var attrClass = "class";
 })(jQuery);
