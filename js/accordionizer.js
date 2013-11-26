@@ -12,7 +12,7 @@
 
       data: {
         containerClassName: '',
-        instanceClassName: '',
+        instanceClassName: ''
       },
 
       parsedDOM: {
@@ -56,17 +56,15 @@
               pix = imageData.data;
 
             for (var i = 0; i < pix.length; i += 4) {
-              var grayscale = pix[i] * .3 + pix[i+1] * .59 + pix[i+2] * .11;
-
+              var grayscale = pix[i] * .3 + pix[i + 1] * .59 + pix[i + 2] * .11;
               pix[i] = grayscale;
-              pix[i+1] = grayscale;
-              pix[i+2] = grayscale;
+              pix[i + 1] = grayscale;
+              pix[i + 2] = grayscale;
             }
 
             context.putImageData(imageData, 0, 0);
             $canvas.insertAfter($image);
           });
-
         }
       },
 
