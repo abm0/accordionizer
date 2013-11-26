@@ -147,8 +147,8 @@
               'html': title
             }),
             $image = $('<img />', {
-              attrSrc: src,
-              attrAlt: title
+              'src': src,
+              'alt': title
             });
 
           $image.css({
