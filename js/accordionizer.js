@@ -8,6 +8,7 @@
     var attrSrc = "src";
     var attrAlt = "alt";
     var tagImg = "img";
+    var attrClass = "class";
 
     var core = {
       defaultOptions: $.extend({
@@ -27,7 +28,7 @@
       elements: [],
 
       writeContainerNamesData: function($container){
-        core.data.containerClassName = core.getContainerClassName($container);
+        core.data.containerClassName = $container.attr(attrClass);
         core.data.instanceClassName = core.getInstanceClassName($container);
       },
 
@@ -70,15 +71,11 @@
         }
       },
 
-      getContainerClassName: function($container) {
-        return $container.attr('class');
-      },
-
       buildInstanceClassName: function($container) {
         var className = {
             prefix: core.defaultOptions.classPrefix,
             id: core.generateInstanceId(),
-            postfix: '__' + core.getContainerClassName($container)
+            postfix: '__' + $container.attr(attrClass)
           }
 
         return className.prefix + className.id + className.postfix;
