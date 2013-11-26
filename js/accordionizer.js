@@ -10,11 +10,8 @@
         classPrefix: 'accordionized'
       }, options),
 
-      // TODO: Рефакторинг получения названий сущности плагина и класса конейнера -----
       data: {
-        // containerClassName: core.getContainerClassName(core.data.$container),
         containerClassName: '',
-        // instanceClassName: core.getInstanceClassName(core.data.$container),
         instanceClassName: '',
       },
 
@@ -26,7 +23,7 @@
           count: 0
         }
       },
-      // TODO: Рефакторинг получения названий сущности плагина и класса конейнера -----
+
       writeContainerNamesData: function($container){
         core.data.containerClassName = core.getContainerClassName($container);
         core.data.instanceClassName = core.getInstanceClassName($container);
@@ -69,21 +66,13 @@
             context.putImageData(imageData, 0, 0);
             $canvas.insertAfter($image);
           });
-              
+
         }
       },
-
-      /**
-       * Получаем класс контейнера
-       */
 
       getContainerClassName: function($container) {
         return $container.attr('class');
       },
-
-      /**
-       * Собираем класс для текущей сущности плагина
-       */
 
       buildInstanceClassName: function($container) {
         var className = {
@@ -95,31 +84,13 @@
         return className.prefix + className.id + className.postfix;
       },
 
-      /**
-       * Проверяем полученный класс на уникальность
-       */
-
-      //TODO: Реализовать рабочую проверку на уникальность -----
       getInstanceClassName: function($container) {
-        // while($('body').find('.' + className).length) {
-        //   var className = core.buildInstanceClassName($container);
-        // }
-
         return core.buildInstanceClassName($container);
       },
 
-      /**
-       * Генерируем ID для текущей сущности
-       */
-
       generateInstanceId: function() {
         return Math.floor(Math.random() * (99999 - 0 + 1)) + 0;
-
       },
-
-      /**
-       * Устанавливаем автоматическую прокрутку
-       */
 
       setLoop: function($container) {
         if(core.defaultOptions.scroll.auto) {
@@ -136,11 +107,6 @@
         }
       },
 
-      /**
-       * Инициализация плагина
-       */
-
-      // TODO: Рефакторинг -------------------------------------------
       init: function($container, defaultOptions, externalOptions) {
         core.writeContainerNamesData($container);
         core.parse($container);
@@ -149,10 +115,6 @@
         core.setEvents($container);
         $container.children('.banner-item').first().trigger('mousedown');
       },
-
-      /**
-       *  Парсим DOM элементы, находящиеся в контейнере
-       */
 
       parse: function($container) {
         var images = $container.find('img');
@@ -170,10 +132,6 @@
         }
         images.remove();
       },
-
-      /**
-       * Собираем новую DOM структуру
-       */
 
       buildDOM: function($container) {
         var builtElements = [];
@@ -211,16 +169,9 @@
 
           builtElements.push($wrapper);
         }
-        // $(builtElements).appendTo($container);
         $container.append(builtElements);
-        // $container.addClass(core.data.instanceClassName);
       },
 
-      /**
-       * Прикручиваем анимацию
-       */
-
-       //TODO: Рефакторинг ----------------------------------------------
       setEvents: function($container) {
         var $elements = $container.find('.banner-item'),
           slideWidth = $container.width() - (core.defaultOptions.tabWidth + 1) * (core.parsedDOM.elements.count - 1) - 1;
@@ -242,10 +193,6 @@
         });
       },
 
-      /**
-       * Анимация разворачивания
-       */
-
       unwrap: function($container, $slide, slideWidth) {
         setTimeout(function(){
           $slide
@@ -264,11 +211,6 @@
             $slide
               .find('.banner-item-label')
               .fadeIn(300);
-
-            // $slide
-            //   .find('canvas')
-            //   .fadeOut(300);
-
             $slide
               .find('img')
               .fadeIn(300);
@@ -276,10 +218,6 @@
         }, 300);
 
       },
-
-      /**
-       * Анимация сворачивания
-       */
 
       wrap: function($container, $slide) {
         setTimeout(function(){
@@ -291,21 +229,17 @@
             })
             .removeClass('active');
 
-          
-          setTimeout(function(){
-            // $slide
-            //   .find('canvas')
-            //   .fadeIn(300);
 
+          setTimeout(function(){
             $slide
               .find('img')
               .fadeOut(300);
 
             $slide
               .find('.banner-item-overlay')
-              .fadeIn(400); 
+              .fadeIn(400);
           }, 400);
-          
+
         }, 300);
 
         $slide
