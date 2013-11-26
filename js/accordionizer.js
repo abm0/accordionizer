@@ -147,7 +147,7 @@
               'html': title
             }),
             $image = $('<img />', {
-              'src': src,
+              attrSrc: src,
               attrAlt: title
             });
 
