@@ -1,5 +1,16 @@
 (function($){
   $.fn.accordionize = function(options) {
+    function AccordionizeNode(tagName, src, alt) {
+      this.tagName = tagName;
+      this.src = src;
+      this.alt = alt;
+    }
+
+    var propTagName = "tagName";
+    var attrSrc = "src";
+    var attrAlt = "alt";
+    var tagImg = "img";
+
     var core = {
       defaultOptions: $.extend({
         tabWidth: 80,
@@ -16,12 +27,7 @@
       },
 
       parsedDOM: {
-        elements: {
-          tagName: [],
-          src: [],
-          alt: [],
-          count: 0
-        }
+        elements: []
       },
 
       writeContainerNamesData: function($container){
@@ -107,36 +113,39 @@
 
       init: function($container, defaultOptions, externalOptions) {
         core.writeContainerNamesData($container);
-        core.parse($container);
+        core.findAndConvertBaseNode($container);
         core.buildDOM($container);
         core.grayscale.createCanvas($container);
         core.setEvents($container);
         $container.children('.banner-item').first().trigger('mousedown');
       },
 
-      parse: function($container) {
-        var images = $container.find('img');
+      convertBaseNodeToAccordionizeNode: function(baseNodeArray) {
+        for (var index in baseNodeArray) {
+          var node = $(baseNodeArray[index]);
 
-        for (var i = 0; i < images.length; i++) {
-          var $element = $(images[i]),
-            tagName = $element.prop('tagName'),
-            src = $element.attr('src'),
-            alt = $element.attr('alt');
-
-          core.parsedDOM.elements.tagName.push(tagName);
-          core.parsedDOM.elements.src.push(src);
-          core.parsedDOM.elements.alt.push(alt);
-          core.parsedDOM.elements.count++;
+          var tagName = node.prop(propTagName);
+          var src = node.attr(attrSrc);
+          var alt = node.attr(attrAlt);
+          var accordionizeNode = new AccordionizeNode(tagName, src, alt)
+          core.parsedDOM.elements.push(accordionizeNode);
         }
-        images.remove();
+      },
+
+      findAndConvertBaseNode: function($container) {
+        var objImages = $container.find(tagImg);
+        var imageArray = objImages.toArray();
+
+        core.convertBaseNodeToAccordionizeNode(imageArray);
+        objImages.remove();
       },
 
       buildDOM: function($container) {
         var builtElements = [];
-        for(var i = 0; i < core.parsedDOM.elements.count; i++) {
-          var title = core.parsedDOM.elements.alt[i],
-            src = core.parsedDOM.elements.src[i],
-            tagName = core.parsedDOM.elements.tagName[i],
+        for(var i = 0; i < core.parsedDOM.elements.length; i++) {
+          var title = core.parsedDOM.elements[i].alt
+            src = core.parsedDOM.elements[i].src,
+            tagName = core.parsedDOM.elements[i].tagName,
             $wrapper = $('<div />',{
               'class': 'banner-item',
               'data-title': title
@@ -172,7 +181,7 @@
 
       setEvents: function($container) {
         var $elements = $container.find('.banner-item'),
-          slideWidth = $container.width() - (core.defaultOptions.tabWidth + 1) * (core.parsedDOM.elements.count - 1) - 1;
+          slideWidth = $container.width() - (core.defaultOptions.tabWidth + 1) * (core.parsedDOM.elements.length - 1) - 1;
 
         $elements.each(function(){
           $(this).on('mousedown', function(){
