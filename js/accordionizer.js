@@ -24,9 +24,7 @@
         instanceClassName: ''
       },
 
-      parsedDOM: {
-        elements: []
-      },
+      elements: [],
 
       writeContainerNamesData: function($container){
         core.data.containerClassName = core.getContainerClassName($container);
@@ -125,7 +123,7 @@
           var accordionizeNode = new AccordionizeNode({tagName: node.prop(propTagName),
             src: node.attr(attrSrc),
             alt: node.attr(attrAlt)});
-          core.parsedDOM.elements.push(accordionizeNode);
+          core.elements.push(accordionizeNode);
         }
       },
 
@@ -139,10 +137,10 @@
 
       buildDOM: function($container) {
         var builtElements = [];
-        for(var i = 0; i < core.parsedDOM.elements.length; i++) {
-          var title = core.parsedDOM.elements[i].alt
-            src = core.parsedDOM.elements[i].src,
-            tagName = core.parsedDOM.elements[i].tagName,
+        for(var i = 0; i < core.elements.length; i++) {
+          var title = core.elements[i].alt
+            src = core.elements[i].src,
+            tagName = core.elements[i].tagName,
             $wrapper = $('<div />',{
               'class': 'banner-item',
               'data-title': title
@@ -178,7 +176,7 @@
 
       setEvents: function($container) {
         var $elements = $container.find('.banner-item'),
-          slideWidth = $container.width() - (core.defaultOptions.tabWidth + 1) * (core.parsedDOM.elements.length - 1) - 1;
+          slideWidth = $container.width() - (core.defaultOptions.tabWidth + 1) * (core.elements.length - 1) - 1;
 
         $elements.each(function(){
           $(this).on('mousedown', function(){
