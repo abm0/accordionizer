@@ -1,9 +1,7 @@
 (function($){
   $.fn.accordionize = function(options) {
-    function AccordionizeNode(tagName, src, alt) {
-      this.tagName = tagName;
-      this.src = src;
-      this.alt = alt;
+    function AccordionizeNode(accordionizeNode) {
+      $.extend(this, accordionizeNode);
     }
 
     var propTagName = "tagName";
@@ -124,10 +122,9 @@
         for (var index in baseNodeArray) {
           var node = $(baseNodeArray[index]);
 
-          var tagName = node.prop(propTagName);
-          var src = node.attr(attrSrc);
-          var alt = node.attr(attrAlt);
-          var accordionizeNode = new AccordionizeNode(tagName, src, alt)
+          var accordionizeNode = new AccordionizeNode({tagName: node.prop(propTagName),
+            src: node.attr(attrSrc),
+            alt: node.attr(attrAlt)});
           core.parsedDOM.elements.push(accordionizeNode);
         }
       },
