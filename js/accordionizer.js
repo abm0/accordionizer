@@ -5,7 +5,7 @@
         core.writeContainerNamesData($container);
         core.findAndConvertBaseNode($container);
         core.buildDOM($container);
-        core.grayscale.createCanvas($container);
+        core.paintOnCanvas($container);
         core.setEvents($container);
         $container.children('.banner-item').first().trigger('mousedown');
       },
@@ -78,42 +78,46 @@
         $container.append(builtElements);
       },
 
-      grayscale: {
-        createCanvas: function($container) {
-          var $images = $container.find(tagImg);
+      paintOnCanvas: function($container) {
+        var $images = $container.find(tagImg);
 
-          $images.each(function(){
-            var $image = $(this),
-              imgWidth = $image.width(),
-              imgHeight = $image.height(),
-              imgName = $image.attr(attrAlt),
-              $canvas = $('<canvas />')
-                .attr({
-                  'width': imgWidth,
-                  'height': imgHeight,
-                  'data-rel': imgName
-                })
-                .css({
-                  position: 'absolute'
-                });
+        $images.each(function(){
+          var $image = $(this);
+          var imgWidth = $image.width();
+          var imgHeight = $image.height();
+          var imgName = $image.attr(attrAlt);
+          var $canvas = core.getCanvas(imgWidth, imgHeight, imgName);
 
-            var context = $canvas.get(0).getContext('2d');
+          var context = $canvas.get(0).getContext('2d');
 
-            context.drawImage($image.get(0), 0, 0);
+          context.drawImage($image.get(0), 0, 0);
 
-            var imageData = context.getImageData(0, 0, imgWidth, imgHeight),
-              pix = imageData.data;
+          var imageData = context.getImageData(0, 0, imgWidth, imgHeight);
 
-            for (var i = 0; i < pix.length; i += 4) {
-              var grayscale = pix[i] * .3 + pix[i + 1] * .59 + pix[i + 2] * .11;
-              pix[i] = grayscale;
-              pix[i + 1] = grayscale;
-              pix[i + 2] = grayscale;
-            }
+          core.grayscale(imageData);
 
-            context.putImageData(imageData, 0, 0);
-            $canvas.insertAfter($image);
-          });
+          context.putImageData(imageData, 0, 0);
+          $canvas.insertAfter($image);
+        });
+      },
+
+      getCanvas: function(imgWidth, imgHeight, imgName) {
+        return $(tagCanvas)
+            .attr({
+              'width': imgWidth,
+              'height': imgHeight,
+              'data-rel': imgName
+            })
+            .css({
+              position: positionVal
+            });
+      },
+
+      grayscale: function(imageData) {
+        var pix = imageData.data;
+        for (var i = 0; i < pix.length; i += 4) {
+          var grayscale = pix[i] * .3 + pix[i + 1] * .59 + pix[i + 2] * .11;
+          pix[i] = pix[i + 1] = pix[i + 2] = grayscale;
         }
       },
 
@@ -245,4 +249,6 @@
   var attrAlt = "alt";
   var tagImg = "img";
   var attrClass = "class";
+  var tagCanvas = "<canvas />";
+  var positionVal = "absolute";
 })(jQuery);
