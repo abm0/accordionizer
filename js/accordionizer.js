@@ -182,57 +182,47 @@
       },
 
       unwrap: function($container, $slide, slideWidth) {
-        setTimeout(function(){
-          $slide
-            .animate({
-              'width': slideWidth + 'px'
-            }, 400, function(){
-              $container.attr('data-animated', 'false');
-            })
-            .addClass('active');
+        setTimeout(function() {
+          core.setDataForAnimate($container, $slide, slideWidth);
+          $slide.addClass('active');
 
-          $slide
-            .find('.banner-item-overlay')
-            .fadeOut(400);
+          $slide.find('.banner-item-overlay').fadeOut(400);
 
-          setTimeout(function(){
-            $slide
-              .find('.banner-item-label')
-              .fadeIn(300);
-            $slide
-              .find('img')
-              .fadeIn(300);
+          setTimeout(function() {
+            core.fadeInElementsForUnwrap($slide);
           }, 400)
         }, 300);
-
       },
 
       wrap: function($container, $slide) {
-        setTimeout(function(){
-          $slide
-            .animate({
-              'width': core.defaultOptions.tabWidth + 'px'
-            }, 400, function(){
-              $container.attr('data-animated', 'false');
-            })
-            .removeClass('active');
-
+        setTimeout(function() {
+          core.setDataForAnimate($container, $slide, core.defaultOptions.tabWidth);
+          $slide.removeClass('active');
 
           setTimeout(function(){
-            $slide
-              .find('img')
-              .fadeOut(300);
-
-            $slide
-              .find('.banner-item-overlay')
-              .fadeIn(400);
+            core.fadeInElementsForWrap($slide);
           }, 400);
-
         }, 300);
 
-        $slide
-          .find('.banner-item-label')
-          .fadeOut(300);
+        $slide.find('.banner-item-label').fadeOut(300);
+      },
+
+      setDataForAnimate: function(container, slide, width) {
+        slide.animate({ 'width': width + 'px' }, 400,
+          function() {
+            container.attr('data-animated', 'false');
+          }
+        );
+      },
+
+      fadeInElementsForUnwrap: function(slide) {
+        slide.find('.banner-item-label').fadeIn(300);
+        slide.find('img').fadeIn(300);
+      },
+
+      fadeInElementsForWrap: function(slide) {
+        slide.find('img').fadeOut(300);
+        slide.find('.banner-item-overlay').fadeIn(400);
       }
      }
 
