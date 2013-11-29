@@ -2,9 +2,8 @@
   $.fn.accordionize = function(options) {
     var core = {
       init: function($container, defaultOptions, externalOptions) {
-        core.writeContainerNamesData($container);
         core.findAndConvertBaseNode($container);
-        core.buildDOM($container);
+        core.buildAccordionizerNode($container);
         core.paintOnCanvas($container);
         core.setEvents($container);
         $container.children('.banner-item').first().trigger('mousedown');
@@ -16,76 +15,89 @@
           timeout: 7000,
           auto: true
         },
-        classPrefix: 'accordionized'
+        classPrefix: 'accordionized',
+        banerItem: 'banner-item'
       }, options),
-
-      data: {
-        containerClassName: '',
-        instanceClassName: ''
-      },
 
       elements: [],
 
-      writeContainerNamesData: function($container){
-        core.data.containerClassName = $container.attr(attrClass);
-        core.data.instanceClassName = core.buildInstanceClassName($container);
-      },
-
       findAndConvertBaseNode: function($container) {
-        var objImages = $container.find(tagImg);
+        var objImages = $container.find('img');
         var imageArray = objImages.toArray();
 
         core.convertBaseNodeToAccordionizeNode(imageArray);
         objImages.remove();
       },
 
-      buildDOM: function($container) {
+      buildAccordionizerNode: function($container) {
         var builtElements = [];
         for(var i = 0; i < core.elements.length; i++) {
-          var title = core.elements[i].alt
-            src = core.elements[i].src,
-            tagName = core.elements[i].tagName,
-            $wrapper = $('<div />',{
-              'class': 'banner-item',
-              'data-title': title
-            }),
-            $overlay = $('<div />', {
-              'class': 'banner-item-overlay',
-              'html': title
-            }),
-            $label = $('<div />', {
-              'class': 'banner-item-label',
-              'html': title
-            }),
-            $image = $('<img />', {
-              'src': src,
-              'alt': title
-            });
-
-          $image.css({
-            'position': 'absolute',
-            'display': 'none',
-            'z-index': '1'
-          });
-
-          $wrapper
-            .append($overlay)
-            .append($label)
-            .append($image);
-
-          builtElements.push($wrapper);
+          var wrapper = core.createAccordionizerNodeWrapper(core.elements[i]);
+          builtElements.push(wrapper);
         }
         $container.append(builtElements);
       },
 
+      createAccordionizerNodeWrapper: function(accordionizerNode) {
+        var title = accordionizerNode.alt;
+        var src = accordionizerNode.src;
+
+        var wrapper = $('<div />',{
+          'class': core.defaultOptions.banerItem,
+          'data-title': title
+        });
+
+        wrapper.append(core.createAccordionizerNodeOverlay(title))
+        wrapper.append(core.createAccordionizerNodeLabel(title))
+        wrapper.append(core.createAccordionizerNodeImg(title, src));
+        return wrapper;
+      },
+
+      createAccordionizerNodeOverlay: function(title) {
+        var overlay = $('<div />', {
+          'class': core.defaultOptions.banerItem + '-overlay',
+          'html': title
+        });
+        return overlay;
+      },
+
+      createAccordionizerNodeLabel: function(title) {
+        var label = $('<div />', {
+          'class': core.defaultOptions.banerItem + '-label',
+          'html': title
+        });
+        return label;
+      },
+
+      createAccordionizerNodeImg: function(title, src) {
+        var image = $('<img />', {
+          'alt': title,
+          'src': src
+        });
+
+        image = core.addCssAccordionizerNodeImg(image);
+        return image;
+      },
+
+      addCssAccordionizerNodeImg: function(image) {
+        image.css({
+          'position': 'absolute',
+          'display': 'none',
+          'z-index': '1'
+        });
+
+        return image;
+      },
+
       paintOnCanvas: function($container) {
-        var $images = $container.find(tagImg);
+        var $images = $container.find('img');
 
         $images.each(function(){
           var $image = $(this);
           var imgWidth = $image.width();
           var imgHeight = $image.height();
-          var imgName = $image.attr(attrAlt);
+          var imgName = $image.attr('alt');
+
           var $canvas = core.getCanvas(imgWidth, imgHeight, imgName);
 
           var context = $canvas.get(0).getContext('2d');
@@ -102,15 +114,16 @@
       },
 
       getCanvas: function(imgWidth, imgHeight, imgName) {
-        return $(tagCanvas)
-            .attr({
-              'width': imgWidth,
-              'height': imgHeight,
-              'data-rel': imgName
-            })
-            .css({
-              position: positionVal
-            });
+        var canvas = $('<canvas />');
+        canvas.attr({
+          'width': imgWidth,
+          'height': imgHeight,
+          'data-rel': imgName
+        });
+        canvas.css({
+          position: 'absolute'
+        });
+        return canvas;
       },
 
       grayscale: function(imageData) {
@@ -142,20 +155,6 @@
         });
       },
 
-      buildInstanceClassName: function($container) {
-        var className = {
-            prefix: core.defaultOptions.classPrefix,
-            id: core.generateInstanceId(),
-            postfix: '__' + $container.attr(attrClass)
-          }
-
-        return className.prefix + className.id + className.postfix;
-      },
-
-      generateInstanceId: function() {
-        return Math.floor(Math.random() * (99999 - 0 + 1)) + 0;
-      },
-
       setLoop: function($container) {
         if(core.defaultOptions.scroll.auto) {
           clearInterval(window.interval);
@@ -175,65 +174,55 @@
         for (var index in baseNodeArray) {
           var node = $(baseNodeArray[index]);
 
-          var accordionizeNode = new AccordionizeNode({tagName: node.prop(propTagName),
-            src: node.attr(attrSrc),
-            alt: node.attr(attrAlt)});
+          var accordionizeNode = new AccordionizeNode({tagName: node.prop('tagName'),
+            src: node.attr('src'),
+            alt: node.attr('alt')});
           core.elements.push(accordionizeNode);
         }
       },
 
       unwrap: function($container, $slide, slideWidth) {
-        setTimeout(function(){
-          $slide
-            .animate({
-              'width': slideWidth + 'px'
-            }, 400, function(){
-              $container.attr('data-animated', 'false');
-            })
-            .addClass('active');
+        setTimeout(function() {
+          core.setDataForAnimate($container, $slide, slideWidth);
+          $slide.addClass('active');
 
-          $slide
-            .find('.banner-item-overlay')
-            .fadeOut(400);
+          $slide.find('.banner-item-overlay').fadeOut(400);
 
-          setTimeout(function(){
-            $slide
-              .find('.banner-item-label')
-              .fadeIn(300);
-            $slide
-              .find(tagImg)
-              .fadeIn(300);
+          setTimeout(function() {
+            core.fadeInElementsForUnwrap($slide);
           }, 400)
         }, 300);
-
       },
 
       wrap: function($container, $slide) {
-        setTimeout(function(){
-          $slide
-            .animate({
-              'width': core.defaultOptions.tabWidth + 'px'
-            }, 400, function(){
-              $container.attr('data-animated', 'false');
-            })
-            .removeClass('active');
-
+        setTimeout(function() {
+          core.setDataForAnimate($container, $slide, core.defaultOptions.tabWidth);
+          $slide.removeClass('active');
 
           setTimeout(function(){
-            $slide
-              .find(tagImg)
-              .fadeOut(300);
-
-            $slide
-              .find('.banner-item-overlay')
-              .fadeIn(400);
+            core.fadeInElementsForWrap($slide);
           }, 400);
-
         }, 300);
 
-        $slide
-          .find('.banner-item-label')
-          .fadeOut(300);
+        $slide.find('.banner-item-label').fadeOut(300);
+      },
+
+      setDataForAnimate: function(container, slide, width) {
+        slide.animate({ 'width': width + 'px' }, 400,
+          function() {
+            container.attr('data-animated', 'false');
+          }
+        );
+      },
+
+      fadeInElementsForUnwrap: function(slide) {
+        slide.find('.banner-item-label').fadeIn(300);
+        slide.find('img').fadeIn(300);
+      },
+
+      fadeInElementsForWrap: function(slide) {
+        slide.find('img').fadeOut(300);
+        slide.find('.banner-item-overlay').fadeIn(400);
       }
      }
 
@@ -243,12 +232,4 @@
   function AccordionizeNode(accordionizeNode) {
     $.extend(this, accordionizeNode);
   }
-
-  var propTagName = "tagName";
-  var attrSrc = "src";
-  var attrAlt = "alt";
-  var tagImg = "img";
-  var attrClass = "class";
-  var tagCanvas = "<canvas />";
-  var positionVal = "absolute";
 })(jQuery);
