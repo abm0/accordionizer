@@ -3,7 +3,7 @@
     var core = {
       init: function($container, defaultOptions, externalOptions) {
         core.findAndConvertBaseNode($container);
-        core.buildDOM($container);
+        core.buildAccordionizerNode($container);
         core.paintOnCanvas($container);
         core.setEvents($container);
         $container.children('.banner-item').first().trigger('mousedown');
@@ -15,7 +15,8 @@
           timeout: 7000,
           auto: true
         },
-        classPrefix: 'accordionized'
+        classPrefix: 'accordionized',
+        banerItem: 'banner-item'
       }, options),
 
       elements: [],
@@ -28,43 +29,64 @@
         objImages.remove();
       },
 
-      buildDOM: function($container) {
+      buildAccordionizerNode: function($container) {
         var builtElements = [];
         for(var i = 0; i < core.elements.length; i++) {
-          var title = core.elements[i].alt
-            src = core.elements[i].src,
-            tagName = core.elements[i].tagName,
-            $wrapper = $('<div />',{
-              'class': 'banner-item',
-              'data-title': title
-            }),
-            $overlay = $('<div />', {
-              'class': 'banner-item-overlay',
-              'html': title
-            }),
-            $label = $('<div />', {
-              'class': 'banner-item-label',
-              'html': title
-            }),
-            $image = $('<img />', {
-              'src': src,
-              'alt': title
-            });
-
-          $image.css({
-            'position': 'absolute',
-            'display': 'none',
-            'z-index': '1'
-          });
-
-          $wrapper
-            .append($overlay)
-            .append($label)
-            .append($image);
-
-          builtElements.push($wrapper);
+          var wrapper = core.createAccordionizerNodeWrapper(core.elements[i]);
+          builtElements.push(wrapper);
         }
         $container.append(builtElements);
+      },
+
+      createAccordionizerNodeWrapper: function(accordionizerNode) {
+        var title = accordionizerNode.alt;
+        var src = accordionizerNode.src;
+
+        var wrapper = $('<div />',{
+          'class': core.defaultOptions.banerItem,
+          'data-title': title
+        });
+
+        wrapper.append(core.createAccordionizerNodeOverlay(title))
+        wrapper.append(core.createAccordionizerNodeLabel(title))
+        wrapper.append(core.createAccordionizerNodeImg(title, src));
+        return wrapper;
+      },
+
+      createAccordionizerNodeOverlay: function(title) {
+        var overlay = $('<div />', {
+          'class': core.defaultOptions.banerItem + '-overlay',
+          'html': title
+        });
+        return overlay;
+      },
+
+      createAccordionizerNodeLabel: function(title) {
+        var label = $('<div />', {
+          'class': core.defaultOptions.banerItem + '-label',
+          'html': title
+        });
+        return label;
+      },
+
+      createAccordionizerNodeImg: function(title, src) {
+        var image = $('<img />', {
+          'alt': title,
+          'src': src
+        });
+
+        image = core.addCssAccordionizerNodeImg(image);
+        return image;
+      },
+
+      addCssAccordionizerNodeImg: function(image) {
+        image.css({
+          'position': 'absolute',
+          'display': 'none',
+          'z-index': '1'
+        });
+
+        return image;
       },
 
       paintOnCanvas: function($container) {
@@ -75,6 +97,7 @@
           var imgWidth = $image.width();
           var imgHeight = $image.height();
           var imgName = $image.attr('alt');
+
           var $canvas = core.getCanvas(imgWidth, imgHeight, imgName);
 
           var context = $canvas.get(0).getContext('2d');
