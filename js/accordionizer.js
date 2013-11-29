@@ -2,7 +2,6 @@
   $.fn.accordionize = function(options) {
     var core = {
       init: function($container, defaultOptions, externalOptions) {
-        core.writeContainerNamesData($container);
         core.findAndConvertBaseNode($container);
         core.buildDOM($container);
         core.paintOnCanvas($container);
@@ -19,17 +18,7 @@
         classPrefix: 'accordionized'
       }, options),
 
-      data: {
-        containerClassName: '',
-        instanceClassName: ''
-      },
-
       elements: [],
-
-      writeContainerNamesData: function($container){
-        core.data.containerClassName = $container.attr('class');
-        core.data.instanceClassName = core.buildInstanceClassName($container);
-      },
 
       findAndConvertBaseNode: function($container) {
         var objImages = $container.find('img');
@@ -140,18 +129,6 @@
             }
           });
         });
-      },
-
-      buildInstanceClassName: function($container) {
-        var postfix = '__' + $container.attr('class');
-        var prefix = core.defaultOptions.classPrefix;
-        var id = core.generateInstanceId();
-        var name = prefix + id + postfix;
-        return name;
-      },
-
-      generateInstanceId: function() {
-        return Math.floor(Math.random() * (99999 - 0 + 1)) + 0;
       },
 
       setLoop: function($container) {
