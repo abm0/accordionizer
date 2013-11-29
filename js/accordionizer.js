@@ -114,15 +114,16 @@
       },
 
       getCanvas: function(imgWidth, imgHeight, imgName) {
-        return $('<canvas />')
-            .attr({
-              'width': imgWidth,
-              'height': imgHeight,
-              'data-rel': imgName
-            })
-            .css({
-              position: 'absolute'
-            });
+        var canvas = $('<canvas />');
+        canvas.attr({
+          'width': imgWidth,
+          'height': imgHeight,
+          'data-rel': imgName
+        });
+        canvas.css({
+          position: 'absolute'
+        });
+        return canvas;
       },
 
       grayscale: function(imageData) {
