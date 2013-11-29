@@ -143,13 +143,11 @@
       },
 
       buildInstanceClassName: function($container) {
-        var className = {
-            prefix: core.defaultOptions.classPrefix,
-            id: core.generateInstanceId(),
-            postfix: '__' + $container.attr('class')
-          }
-
-        return className.prefix + className.id + className.postfix;
+        var postfix = '__' + $container.attr('class');
+        var prefix = core.defaultOptions.classPrefix;
+        var id = core.generateInstanceId();
+        var name = prefix + id + postfix;
+        return name;
       },
 
       generateInstanceId: function() {
