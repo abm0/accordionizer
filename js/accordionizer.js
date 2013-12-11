@@ -1,3 +1,13 @@
+/**
+ * accordionizer
+ * v 0.0.1
+ *
+ * Igor Dranichnikov
+ * Copyright 2013, MIT License
+ *
+ * Dependencies: jQuery(>=1.10.2)
+ */
+
 (function($){
   $.fn.accordionize = function(options) {
     var core = {
