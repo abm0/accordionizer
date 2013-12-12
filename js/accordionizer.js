@@ -8,16 +8,10 @@
  * Dependencies: jQuery(>=1.10.2)
  */
 
-(function($){
+(function($) {
   $.fn.accordionize = function(options) {
     var core = {
-      init: function($container, defaultOptions, externalOptions) {
-        core.findAndConvertBaseNode($container);
-        core.buildAccordionizerNode($container);
-        core.paintOnCanvas($container);
-        core.setEvents($container);
-        $container.children('.banner-item').first().trigger('mousedown');
-      },
+      elements: [],
 
       defaultOptions: $.extend({
         tabWidth: 80,
@@ -29,7 +23,13 @@
         banerItem: 'banner-item'
       }, options),
 
-      elements: [],
+      init: function($container, defaultOptions, externalOptions) {
+        core.findAndConvertBaseNode($container);
+        core.buildAccordionizerNode($container);
+        core.paintOnCanvas($container);
+        core.setEvents($container);
+        $container.children('.banner-item').first().trigger('mousedown');
+      },
 
       findAndConvertBaseNode: function($container) {
         var objImages = $container.find('img');
@@ -41,10 +41,11 @@
 
       buildAccordionizerNode: function($container) {
         var builtElements = [];
-        for(var i = 0; i < core.elements.length; i++) {
-          var wrapper = core.createAccordionizerNodeWrapper(core.elements[i]);
+        core.elements.forEach(function(element) {
+          var wrapper = core.createAccordionizerNodeWrapper(element);
           builtElements.push(wrapper);
-        }
+        });
+
         $container.append(builtElements);
       },
 
@@ -52,7 +53,7 @@
         var title = accordionizerNode.alt;
         var src = accordionizerNode.src;
 
-        var wrapper = $('<div />',{
+        var wrapper = $('<div />', {
           'class': core.defaultOptions.banerItem,
           'data-title': title
         });
