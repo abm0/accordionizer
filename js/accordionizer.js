@@ -9,26 +9,40 @@
  */
 
 (function($) {
-  $.fn.accordionize = function(options) {
+  $.fn.accordionize = function(externalOptions) {
     var core = {
       elements: [],
+      plaginOptions: {},
 
-      defaultOptions: $.extend({
-        tabWidth: 80,
-        scroll: {
-          timeout: 7000,
-          auto: true
-        },
-        classPrefix: 'accordionized',
-        banerItem: 'banner-item'
-      }, options),
+      init: function($container) {
+        core.createOptions();
 
-      init: function($container, defaultOptions, externalOptions) {
         core.findAndConvertBaseNode($container);
         core.buildAccordionizerNode($container);
         core.paintOnCanvas($container);
         core.setEvents($container);
+
         $container.children('.banner-item').first().trigger('mousedown');
+      },
+
+      createOptions: function() {
+        var defaultOptions = core.getDefaultOptions();
+
+        core.plaginOptions = $.extend(defaultOptions, externalOptions)
+      },
+
+      getDefaultOptions: function() {
+        var defaultOptions = {
+          tabWidth: 80,
+          scroll: {
+            timeout: 7000,
+            auto: true
+          },
+          classPrefix: 'accordionized',
+          banerItem: 'banner-item'
+        };
+
+        return defaultOptions;
       },
 
       findAndConvertBaseNode: function($container) {
@@ -54,7 +68,7 @@
         var src = accordionizerNode.src;
 
         var wrapper = $('<div />', {
-          'class': core.defaultOptions.banerItem,
+          'class': core.plaginOptions.banerItem,
           'data-title': title
         });
 
@@ -66,7 +80,7 @@
 
       createAccordionizerNodeOverlay: function(title) {
         var overlay = $('<div />', {
-          'class': core.defaultOptions.banerItem + '-overlay',
+          'class': core.plaginOptions.banerItem + '-overlay',
           'html': title
         });
         return overlay;
@@ -74,7 +88,7 @@
 
       createAccordionizerNodeLabel: function(title) {
         var label = $('<div />', {
-          'class': core.defaultOptions.banerItem + '-label',
+          'class': core.plaginOptions.banerItem + '-label',
           'html': title
         });
         return label;
@@ -147,7 +161,7 @@
 
       setEvents: function($container) {
         var $elements = $container.find('.banner-item'),
-          slideWidth = $container.width() - (core.defaultOptions.tabWidth + 1) * (core.elements.length - 1) - 1;
+          slideWidth = $container.width() - (core.plaginOptions.tabWidth + 1) * (core.elements.length - 1) - 1;
 
         $elements.each(function(){
           $(this).on('mousedown', function(){
@@ -167,7 +181,7 @@
       },
 
       setLoop: function($container) {
-        if(core.defaultOptions.scroll.auto) {
+        if(core.plaginOptions.scroll.auto) {
           clearInterval(window.interval);
 
           window.interval = setInterval(function() {
@@ -177,7 +191,7 @@
             } else {
               $activeElement.next().trigger('mousedown');
             }
-          }, core.defaultOptions.scroll.timeout);
+          }, core.plaginOptions.scroll.timeout);
         }
       },
 
@@ -207,7 +221,7 @@
 
       wrap: function($container, $slide) {
         setTimeout(function() {
-          core.setDataForAnimate($container, $slide, core.defaultOptions.tabWidth);
+          core.setDataForAnimate($container, $slide, core.plaginOptions.tabWidth);
           $slide.removeClass('active');
 
           setTimeout(function(){
@@ -235,9 +249,9 @@
         slide.find('img').fadeOut(300);
         slide.find('.banner-item-overlay').fadeIn(400);
       }
-     }
+    }
 
-    core.init(this, core.defaultOptions, options);
+    core.init(this);
   }
 
   function AccordionizeNode(accordionizeNode) {
