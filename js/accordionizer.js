@@ -1,49 +1,84 @@
-(function($){
-  $.fn.accordionize = function(options) {
+/**
+ * accordionizer
+ * v 0.0.1
+ *
+ * Igor Dranichnikov
+ * Copyright 2013, MIT License
+ *
+ * Dependencies: jQuery(>=1.10.2)
+ */
+
+(function($) {
+  $.fn.accordionize = function(externalOptions) {
     var core = {
-      init: function($container, defaultOptions, externalOptions) {
-        core.findAndConvertBaseNode($container);
-        core.buildAccordionizerNode($container);
-        core.paintOnCanvas($container);
-        core.setEvents($container);
-        $container.children('.banner-item').first().trigger('mousedown');
+      $plaginContainer: undefined,
+      elements: [],
+      plaginOptions: {},
+
+      init: function($container) {
+        core.$plaginContainer = $container
+
+        core.createOptions();
+        core.createPlaginDomTree();
+
+        core.start();
       },
 
-      defaultOptions: $.extend({
-        tabWidth: 80,
-        scroll: {
-          timeout: 7000,
-          auto: true
-        },
-        classPrefix: 'accordionized',
-        banerItem: 'banner-item'
-      }, options),
+      createOptions: function() {
+        var defaultOptions = core.getDefaultOptions();
 
-      elements: [],
+        core.plaginOptions = $.extend(defaultOptions, externalOptions)
+      },
 
-      findAndConvertBaseNode: function($container) {
-        var objImages = $container.find('img');
+      createPlaginDomTree: function() {
+        core.findAndConvertBaseNode();
+        core.buildAccordionizerNode();
+        core.paintOnCanvas();
+        core.setEvents();
+      },
+
+      start: function() {
+        core.$plaginContainer.children('.banner-item').first().trigger('mousedown');
+      },
+
+      getDefaultOptions: function() {
+        var defaultOptions = {
+          tabWidth: 80,
+          scroll: {
+            timeout: 7000,
+            auto: true
+          },
+          classPrefix: 'accordionized',
+          banerItem: 'banner-item'
+        };
+
+        return defaultOptions;
+      },
+
+      findAndConvertBaseNode: function() {
+        var objImages = core.$plaginContainer.find('img');
         var imageArray = objImages.toArray();
 
         core.convertBaseNodeToAccordionizeNode(imageArray);
         objImages.remove();
       },
 
-      buildAccordionizerNode: function($container) {
+      buildAccordionizerNode: function() {
         var builtElements = [];
-        for(var i = 0; i < core.elements.length; i++) {
-          var wrapper = core.createAccordionizerNodeWrapper(core.elements[i]);
+        core.elements.forEach(function(element) {
+          var wrapper = core.createAccordionizerNodeWrapper(element);
           builtElements.push(wrapper);
-        }
-        $container.append(builtElements);
+        });
+
+        core.$plaginContainer.append(builtElements);
       },
 
       createAccordionizerNodeWrapper: function(accordionizerNode) {
         var title = accordionizerNode.alt;
         var src = accordionizerNode.src;
 
-        var wrapper = $('<div />',{
-          'class': core.defaultOptions.banerItem,
+        var wrapper = $('<div />', {
+          'class': core.plaginOptions.banerItem,
           'data-title': title
         });
 
@@ -55,7 +90,7 @@
 
       createAccordionizerNodeOverlay: function(title) {
         var overlay = $('<div />', {
-          'class': core.defaultOptions.banerItem + '-overlay',
+          'class': core.plaginOptions.banerItem + '-overlay',
           'html': title
         });
         return overlay;
@@ -63,7 +98,7 @@
 
       createAccordionizerNodeLabel: function(title) {
         var label = $('<div />', {
-          'class': core.defaultOptions.banerItem + '-label',
+          'class': core.plaginOptions.banerItem + '-label',
           'html': title
         });
         return label;
@@ -89,8 +124,8 @@
         return image;
       },
 
-      paintOnCanvas: function($container) {
-        var $images = $container.find('img');
+      paintOnCanvas: function() {
+        var $images = core.$plaginContainer.find('img');
 
         $images.each(function(){
           var $image = $(this);
@@ -134,19 +169,19 @@
         }
       },
 
-      setEvents: function($container) {
-        var $elements = $container.find('.banner-item'),
-          slideWidth = $container.width() - (core.defaultOptions.tabWidth + 1) * (core.elements.length - 1) - 1;
+      setEvents: function() {
+        var $elements = core.$plaginContainer.find('.banner-item'),
+          slideWidth = core.$plaginContainer.width() - (core.plaginOptions.tabWidth + 1) * (core.elements.length - 1) - 1;
 
         $elements.each(function(){
           $(this).on('mousedown', function(){
             var $this = $(this);
             if(!$this.is('.active')) {
-              if($container.attr('data-animated') != 'true') {
-                $container.attr('data-animated', 'true');
-                core.wrap($container, $this.siblings('.active'));
-                core.unwrap($container, $this, slideWidth);
-                core.setLoop($container);
+              if(core.$plaginContainer.attr('data-animated') != 'true') {
+                core.$plaginContainer.attr('data-animated', 'true');
+                core.wrap($this.siblings('.active'));
+                core.unwrap($this, slideWidth);
+                core.setLoop();
               }
             } else {
               return false;
@@ -155,18 +190,18 @@
         });
       },
 
-      setLoop: function($container) {
-        if(core.defaultOptions.scroll.auto) {
+      setLoop: function() {
+        if(core.plaginOptions.scroll.auto) {
           clearInterval(window.interval);
 
           window.interval = setInterval(function() {
-            var $activeElement = $container.children('.active');
+            var $activeElement = core.$plaginContainer.children('.active');
             if($activeElement.is(':last-child')) {
-              $container.children('.banner-item:first-child').trigger('mousedown');
+              core.$plaginContainer.children('.banner-item:first-child').trigger('mousedown');
             } else {
               $activeElement.next().trigger('mousedown');
             }
-          }, core.defaultOptions.scroll.timeout);
+          }, core.plaginOptions.scroll.timeout);
         }
       },
 
@@ -181,9 +216,9 @@
         }
       },
 
-      unwrap: function($container, $slide, slideWidth) {
+      unwrap: function($slide, slideWidth) {
         setTimeout(function() {
-          core.setDataForAnimate($container, $slide, slideWidth);
+          core.setDataForAnimate($slide, slideWidth);
           $slide.addClass('active');
 
           $slide.find('.banner-item-overlay').fadeOut(400);
@@ -194,9 +229,9 @@
         }, 300);
       },
 
-      wrap: function($container, $slide) {
+      wrap: function($slide) {
         setTimeout(function() {
-          core.setDataForAnimate($container, $slide, core.defaultOptions.tabWidth);
+          core.setDataForAnimate($slide, core.plaginOptions.tabWidth);
           $slide.removeClass('active');
 
           setTimeout(function(){
@@ -207,10 +242,10 @@
         $slide.find('.banner-item-label').fadeOut(300);
       },
 
-      setDataForAnimate: function(container, slide, width) {
+      setDataForAnimate: function(slide, width) {
         slide.animate({ 'width': width + 'px' }, 400,
           function() {
-            container.attr('data-animated', 'false');
+            core.$plaginContainer.attr('data-animated', 'false');
           }
         );
       },
@@ -224,9 +259,9 @@
         slide.find('img').fadeOut(300);
         slide.find('.banner-item-overlay').fadeIn(400);
       }
-     }
+    }
 
-    core.init(this, core.defaultOptions, options);
+    core.init(this);
   }
 
   function AccordionizeNode(accordionizeNode) {
