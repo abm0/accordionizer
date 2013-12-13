@@ -11,24 +11,34 @@
 (function($) {
   $.fn.accordionize = function(externalOptions) {
     var core = {
+      $plaginContainer: undefined,
       elements: [],
       plaginOptions: {},
 
       init: function($container) {
+        core.$plaginContainer = $container
+
         core.createOptions();
+        core.createPlaginDomTree();
 
-        core.findAndConvertBaseNode($container);
-        core.buildAccordionizerNode($container);
-        core.paintOnCanvas($container);
-        core.setEvents($container);
-
-        $container.children('.banner-item').first().trigger('mousedown');
+        core.start();
       },
 
       createOptions: function() {
         var defaultOptions = core.getDefaultOptions();
 
         core.plaginOptions = $.extend(defaultOptions, externalOptions)
+      },
+
+      createPlaginDomTree: function() {
+        core.findAndConvertBaseNode();
+        core.buildAccordionizerNode();
+        core.paintOnCanvas();
+        core.setEvents();
+      },
+
+      start: function() {
+        core.$plaginContainer.children('.banner-item').first().trigger('mousedown');
       },
 
       getDefaultOptions: function() {
@@ -45,22 +55,22 @@
         return defaultOptions;
       },
 
-      findAndConvertBaseNode: function($container) {
-        var objImages = $container.find('img');
+      findAndConvertBaseNode: function() {
+        var objImages = core.$plaginContainer.find('img');
         var imageArray = objImages.toArray();
 
         core.convertBaseNodeToAccordionizeNode(imageArray);
         objImages.remove();
       },
 
-      buildAccordionizerNode: function($container) {
+      buildAccordionizerNode: function() {
         var builtElements = [];
         core.elements.forEach(function(element) {
           var wrapper = core.createAccordionizerNodeWrapper(element);
           builtElements.push(wrapper);
         });
 
-        $container.append(builtElements);
+        core.$plaginContainer.append(builtElements);
       },
 
       createAccordionizerNodeWrapper: function(accordionizerNode) {
@@ -114,8 +124,8 @@
         return image;
       },
 
-      paintOnCanvas: function($container) {
-        var $images = $container.find('img');
+      paintOnCanvas: function() {
+        var $images = core.$plaginContainer.find('img');
 
         $images.each(function(){
           var $image = $(this);
@@ -159,19 +169,19 @@
         }
       },
 
-      setEvents: function($container) {
-        var $elements = $container.find('.banner-item'),
-          slideWidth = $container.width() - (core.plaginOptions.tabWidth + 1) * (core.elements.length - 1) - 1;
+      setEvents: function() {
+        var $elements = core.$plaginContainer.find('.banner-item'),
+          slideWidth = core.$plaginContainer.width() - (core.plaginOptions.tabWidth + 1) * (core.elements.length - 1) - 1;
 
         $elements.each(function(){
           $(this).on('mousedown', function(){
             var $this = $(this);
             if(!$this.is('.active')) {
-              if($container.attr('data-animated') != 'true') {
-                $container.attr('data-animated', 'true');
-                core.wrap($container, $this.siblings('.active'));
-                core.unwrap($container, $this, slideWidth);
-                core.setLoop($container);
+              if(core.$plaginContainer.attr('data-animated') != 'true') {
+                core.$plaginContainer.attr('data-animated', 'true');
+                core.wrap($this.siblings('.active'));
+                core.unwrap($this, slideWidth);
+                core.setLoop();
               }
             } else {
               return false;
@@ -180,14 +190,14 @@
         });
       },
 
-      setLoop: function($container) {
+      setLoop: function() {
         if(core.plaginOptions.scroll.auto) {
           clearInterval(window.interval);
 
           window.interval = setInterval(function() {
-            var $activeElement = $container.children('.active');
+            var $activeElement = core.$plaginContainer.children('.active');
             if($activeElement.is(':last-child')) {
-              $container.children('.banner-item:first-child').trigger('mousedown');
+              core.$plaginContainer.children('.banner-item:first-child').trigger('mousedown');
             } else {
               $activeElement.next().trigger('mousedown');
             }
@@ -206,9 +216,9 @@
         }
       },
 
-      unwrap: function($container, $slide, slideWidth) {
+      unwrap: function($slide, slideWidth) {
         setTimeout(function() {
-          core.setDataForAnimate($container, $slide, slideWidth);
+          core.setDataForAnimate($slide, slideWidth);
           $slide.addClass('active');
 
           $slide.find('.banner-item-overlay').fadeOut(400);
@@ -219,9 +229,9 @@
         }, 300);
       },
 
-      wrap: function($container, $slide) {
+      wrap: function($slide) {
         setTimeout(function() {
-          core.setDataForAnimate($container, $slide, core.plaginOptions.tabWidth);
+          core.setDataForAnimate($slide, core.plaginOptions.tabWidth);
           $slide.removeClass('active');
 
           setTimeout(function(){
@@ -232,10 +242,10 @@
         $slide.find('.banner-item-label').fadeOut(300);
       },
 
-      setDataForAnimate: function(container, slide, width) {
+      setDataForAnimate: function(slide, width) {
         slide.animate({ 'width': width + 'px' }, 400,
           function() {
-            container.attr('data-animated', 'false');
+            core.$plaginContainer.attr('data-animated', 'false');
           }
         );
       },
