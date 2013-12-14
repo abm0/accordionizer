@@ -17,6 +17,12 @@ After found using jQuery container and initialize plugin.
 $('.main-banner').accordionize();
 ```
 
+## Config Options
+- __tabWidth__, type: Number, default: 80
+- __scroll__, type: Object
+  - __timeout__, type: Number, default: 7000
+  - __auto__, type: Boolean, default: true
+
 ## Dependence
 
 * [jQuery 1.10.2](https://developers.google.com/speed/libraries/devguide#jquery)
