@@ -26,4 +26,5 @@ Accordionize.prototype.addSlide = function($img) {
 }
 
 Accordionize.prototype.setOptions = function(options) {
+  this.createOptions(options);
 }
