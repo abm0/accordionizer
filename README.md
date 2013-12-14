@@ -26,8 +26,8 @@ $('.main-banner').accordionize();
 * [jQuery](http://jquery.com/), version >= 1.10.2
 
 ## Authors
-- __Igor Dranichnikov__, _[github](https://github.com/i-dranichnikov), [linkin](ru.linkedin.com/pub/igor-dranichnikov/87/62b/305)_
-- __Aleksey Leshko__, _[github](https://github.com/AlekseyLeshko), [linkin](ru.linkedin.com/pub/aleksey-leshko/71/780/b69)_
+- __Igor Dranichnikov__, _[github](https://github.com/i-dranichnikov), [linkedin](http://ru.linkedin.com/pub/igor-dranichnikov/87/62b/305)_
+- __Aleksey Leshko__, _[github](https://github.com/AlekseyLeshko), [linkedin](http://ru.linkedin.com/pub/aleksey-leshko/71/780/b69)_
 
 ## License
 Copyright (c) 2013 Igor Dranichnikov, Aleksey Leshko Licensed under the The MIT License (MIT)
