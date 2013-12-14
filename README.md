@@ -10,7 +10,6 @@ Example:
   <img src="img/cologne.jpg" alt="Cologne">
   <img src="img/chicago.jpg" alt="Chicago">
 </div>
-
 ```
 After found using jQuery container and initialize plugin.
 ```js
@@ -24,5 +23,7 @@ $('.main-banner').accordionize();
   - __auto__, type: Boolean, default: true
 
 ## Dependence
-
 * [jQuery 1.10.2](https://developers.google.com/speed/libraries/devguide#jquery)
+
+## License
+Copyright (c) 2013 Igor Dranichnikov Licensed under the The MIT License (MIT)
