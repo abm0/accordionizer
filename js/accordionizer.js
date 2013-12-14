@@ -8,32 +8,7 @@
  * Dependencies: jQuery(>=1.10.2)
  */
 
+$.getScript("/js/accordionizeApi.js");
+
 function Accordionize($container) {
-}
-
-Accordionize.prototype.start = function() {
-}
-
-Accordionize.prototype.stop = function() {
-}
-
-Accordionize.prototype.next = function() {
-}
-
-Accordionize.prototype.prev = function() {
-}
-
-Accordionize.prototype.getSlideId = function() {
-}
-
-Accordionize.prototype.geSlideCount = function() {
-}
-
-Accordionize.prototype.moveToSlide = function(id) {
-}
-
-Accordionize.prototype.removeSlide = function(id) {
-}
-
-Accordionize.prototype.addSlide = function($img) {
 }
