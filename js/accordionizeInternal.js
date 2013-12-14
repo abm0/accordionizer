@@ -1,3 +1,5 @@
+$.getScript("/js/accordionizeSlide.js");
+
 Accordionize.prototype.initPlugin = function(options) {
   this.createOptions(options);
   this.createPlaginDomTree();
@@ -29,6 +31,13 @@ Accordionize.prototype.createPlaginDomTree = function() {
   this.convertImgToPluginSlide(imgArray);
 
   $objImages.remove();
+
+  for (var index in this.slides) {
+    var slide = this.slides[index];
+
+    var $wrapper = slide.getWrapper();
+    this.$plaginContainer.append($wrapper);
+  }
 }
 
 Accordionize.prototype.convertImgToPluginSlide = function(imgArray) {
@@ -39,13 +48,10 @@ Accordionize.prototype.convertImgToPluginSlide = function(imgArray) {
     accordionizeSlide = new AccordionizeSlide({
       tagName: $img.prop('tagName'),
       src: $img.attr('src'),
-      alt: $img.attr('alt')
+      alt: $img.attr('alt'),
+      banerItem: this.plaginOptions.banerItem
     });
 
     this.slides.push(accordionizeSlide);
   }
-}
-
-function AccordionizeSlide(properties) {
-  $.extend(this, properties);
 }
