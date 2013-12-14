@@ -30,4 +30,4 @@ $('.main-banner').accordionize();
 - __Aleksey Leshko__, _[github](https://github.com/AlekseyLeshko), [linkin](ru.linkedin.com/pub/aleksey-leshko/71/780/b69)_
 
 ## License
-Copyright (c) 2013 Igor Dranichnikov Licensed under the The MIT License (MIT)
+Copyright (c) 2013 Igor Dranichnikov, Aleksey Leshko Licensed under the The MIT License (MIT)
