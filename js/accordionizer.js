@@ -10,5 +10,9 @@
 
 $.getScript("/js/accordionizeApi.js");
 
-function Accordionize($container) {
+function Accordionize($container, options) {
+  this.$plaginContainer = $container;
+  this.plaginOptions = {};
+  this.slides = [];
+  this.currentSlide = 0;
 }

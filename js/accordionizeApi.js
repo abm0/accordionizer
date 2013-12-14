@@ -24,3 +24,6 @@ Accordionize.prototype.removeSlide = function(id) {
 
 Accordionize.prototype.addSlide = function($img) {
 }
+
+Accordionize.prototype.setOptions = function(options) {
+}
