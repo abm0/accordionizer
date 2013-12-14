@@ -48,7 +48,6 @@
             timeout: 7000,
             auto: true
           },
-          classPrefix: 'accordionized',
           banerItem: 'banner-item'
         };
 
