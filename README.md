@@ -23,7 +23,7 @@ $('.main-banner').accordionize();
   - __auto__, type: Boolean, default: true
 
 ## Dependence
-* [jQuery 1.10.2](https://developers.google.com/speed/libraries/devguide#jquery)
+* [jQuery](http://jquery.com/), version >= 1.10.2
 
 ## License
 Copyright (c) 2013 Igor Dranichnikov Licensed under the The MIT License (MIT)
