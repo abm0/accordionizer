@@ -38,6 +38,8 @@ Accordionize.prototype.createPlaginDomTree = function() {
     var $wrapper = slide.getWrapper();
     this.$plaginContainer.append($wrapper);
   }
+
+  this.paintOnCanvas();
 }
 
 Accordionize.prototype.convertImgToPluginSlide = function(imgArray) {
@@ -53,5 +55,48 @@ Accordionize.prototype.convertImgToPluginSlide = function(imgArray) {
     });
 
     this.slides.push(accordionizeSlide);
+  }
+}
+
+
+Accordionize.prototype.paintOnCanvas = function() {
+  var $images = this.$plaginContainer.find('img');
+
+  for (var i = 0; i < $images.length; i++) {
+    var $image = $($images[i]);
+    var imgWidth = $image.width();
+    var imgHeight = $image.height();
+    var imgName = $image.attr('alt');
+
+    var $canvas = this.getCanvas(imgWidth, imgHeight, imgName);
+    var context = $canvas.get(0).getContext('2d');
+    context.drawImage($image.get(0), 0, 0);
+
+    var imageData = context.getImageData(0, 0, imgWidth, imgHeight);
+    this.grayscale(imageData);
+
+    context.putImageData(imageData, 0, 0);
+    $canvas.insertAfter($image);
+  }
+}
+
+Accordionize.prototype.getCanvas = function(imgWidth, imgHeight, imgName) {
+  var $canvas = $('<canvas />');
+  $canvas.attr({
+    width: imgWidth,
+    height: imgHeight,
+    'data-rel': imgName
+  });
+  $canvas.css({
+    position: 'absolute'
+  });
+  return $canvas;
+}
+
+Accordionize.prototype.grayscale = function(imageData) {
+  var pix = imageData.data;
+  for (var i = 0; i < pix.length; i += 4) {
+    var grayscale = pix[i] * .3 + pix[i + 1] * .59 + pix[i + 2] * .11;
+    pix[i] = pix[i + 1] = pix[i + 2] = grayscale;
   }
 }
