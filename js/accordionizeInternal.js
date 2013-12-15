@@ -3,6 +3,7 @@ $.getScript("/js/accordionizeSlide.js");
 Accordionize.prototype.initPlugin = function(options) {
   this.createOptions(options);
   this.createPlaginDomTree();
+  this.start();
 }
 
 Accordionize.prototype.createOptions = function(options) {
@@ -18,6 +19,7 @@ Accordionize.prototype.getDefaultOptions = function() {
       timeout: 7000,
       auto: true
     },
+    autostart: true,
     banerItem: 'banner-item'
   };
 
