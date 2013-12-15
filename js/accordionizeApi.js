@@ -1,10 +1,8 @@
 Accordionize.prototype.start = function() {
-  if (this.plaginOptions.autostart) {
-    this.$plaginContainer
-      .children('.banner-item')
-      .first()
-      .trigger('mousedown');
-  }
+  this.$plaginContainer
+    .children('.banner-item')
+    .first()
+    .trigger('mousedown');
 }
 
 Accordionize.prototype.stop = function() {

@@ -3,7 +3,9 @@ $.getScript("/js/accordionizeSlide.js");
 Accordionize.prototype.initPlugin = function(options) {
   this.createOptions(options);
   this.createPlaginDomTree();
-  this.start();
+  if (this.plaginOptions.autostart) {
+    this.start();
+  }
 }
 
 Accordionize.prototype.createOptions = function(options) {
