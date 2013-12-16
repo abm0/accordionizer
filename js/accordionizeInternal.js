@@ -1,4 +1,4 @@
-$.getScript("/js/accordionizeSlide.js");
+loadScript("/js/accordionizeSlide.js");
 
 Accordionize.prototype.initPlugin = function(options) {
   this.createOptions(options);
@@ -11,7 +11,7 @@ Accordionize.prototype.initPlugin = function(options) {
 Accordionize.prototype.createOptions = function(options) {
   var defaultOptions = this.getDefaultOptions();
 
-  this.plaginOptions = $.extend(defaultOptions, options)
+  this.plaginOptions = $.extend(defaultOptions, options);
 }
 
 Accordionize.prototype.getDefaultOptions = function() {
@@ -48,11 +48,9 @@ Accordionize.prototype.createPlaginDomTree = function() {
 }
 
 Accordionize.prototype.convertImgToPluginSlide = function(imgArray) {
-  var accordionizeSlide;
   for (var index in imgArray) {
     var $img = $(imgArray[index]);
-
-    accordionizeSlide = new AccordionizeSlide({
+    var accordionizeSlide = new AccordionizeSlide({
       tagName: $img.prop('tagName'),
       src: $img.attr('src'),
       alt: $img.attr('alt'),
@@ -138,7 +136,7 @@ Accordionize.prototype.setEvents = function() {
 }
 
 Accordionize.prototype.setLoop = function(_this) {
-  if(_this.plaginOptions.scroll.auto) {
+  if (this.plaginOptions.scroll.auto) {
     clearInterval(window.interval);
 
     window.interval = setInterval(function() {

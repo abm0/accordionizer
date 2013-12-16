@@ -8,8 +8,8 @@
  * Dependencies: jQuery(>=1.10.2)
  */
 
-$.getScript("/js/accordionizeApi.js");
-$.getScript("/js/accordionizeInternal.js");
+loadScript("/js/accordionizeApi.js");
+loadScript("/js/accordionizeInternal.js");
 
 function Accordionize($container, options) {
   this.$plaginContainer = $container;
@@ -18,4 +18,12 @@ function Accordionize($container, options) {
   this.currentSlide = 0;
 
   this.initPlugin(options);
+}
+
+function loadScript(url) {
+    var head = document.getElementsByTagName('head')[0];
+    var script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = url;
+    head.appendChild(script);
 }
