@@ -7,8 +7,11 @@
   <script src="js/jquery-1.10.2.min.js"></script>
   <script src="../js/accordionizer.js"></script>
 	<script>
+    var accordionize;
   	$(window).load(function() {
-  		$('.main-banner').accordionize();
+      var $container = $('.main-banner');
+
+      accordionize = new Accordionize($container);
   	});
 	</script>
 </head>
@@ -22,5 +25,9 @@
 			<img src="img/chicago.jpg" alt="Chicago">
 		</div>
 	</div>
+  <input type="button" value="Start" onclick="accordionize.start();">
+  <input type="button" value="Next" onclick="accordionize.next();">
+  <input type="button" value="Prev" onclick="accordionize.prev();">
+  <input type="button" value="Stop" onclick="accordionize.stop();">
 </body>
 </html>
