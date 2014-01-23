@@ -64,13 +64,13 @@ Accordionize.prototype.paintOnCanvas = function() {
   var $images = this.$pluginContainer.find('img');
 
   for (var i = 0; i < $images.length; i++) {
-    var $image = $($images[i]);
-    var imgWidth = $image.width();
-    var imgHeight = $image.height();
-    var imgName = $image.attr('alt');
+    var $image = $($images[i]),
+        imgWidth = $image.width(),
+        imgHeight = $image.height(),
+        imgName = $image.attr('alt'),
+        $canvas = this.getCanvas(imgWidth, imgHeight, imgName),
+        context = $canvas.get(0).getContext('2d');
 
-    var $canvas = this.getCanvas(imgWidth, imgHeight, imgName);
-    var context = $canvas.get(0).getContext('2d');
     context.drawImage($image.get(0), 0, 0);
 
     var imageData = context.getImageData(0, 0, imgWidth, imgHeight);
