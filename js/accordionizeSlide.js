@@ -1,55 +1,50 @@
-function AccordionizeSlide(properties) {
+AccordionizeSlide = function (properties) {
   $.extend(this, properties);
-}
+};
 
-AccordionizeSlide.prototype.getWrapper = function() {
-  var $wrapper = $('<div />', {
-    'class': this.banerItem,
-    'data-title': this.alt
-  });
+AccordionizeSlide.prototype = {
 
-  $wrapper
-    .append(this.createDivOverlay())
-    .append(this.createLabel())
-    .append(this.createImg());
+    getWrapper: function() {
+        return $('<div />', {
+                'class': this.bannerItem,
+                'data-title': this.alt
+            })
+            .append(this.createDivOverlay())
+            .append(this.createLabel())
+            .append(this.createImg());
+    },
 
-  return $wrapper;
-}
+    createDivOverlay: function() {
+        return $('<div />', {
+            'class': this.bannerItem + '-overlay',
+            html: this.alt
+        });
+    },
 
-AccordionizeSlide.prototype.createDivOverlay = function() {
-  var $overlay = $('<div />', {
-    'class': this.banerItem + '-overlay',
-    html: this.alt
-  });
+    createLabel: function() {
+        return $('<div />', {
+            'class': this.bannerItem + '-label',
+            html: this.alt
+        });
+    },
 
-  return $overlay;
-}
+    createImg: function() {
+        var $image = $('<img />', {
+            'alt': this.alt,
+            'src': this.src
+        });
 
-AccordionizeSlide.prototype.createLabel = function() {
-  var $label = $('<div />', {
-    'class': this.banerItem + '-label',
-    html: this.alt
-  });
+        $image = this.addCssImg($image);
+        return $image;
+    },
 
-  return $label;
-},
+    addCssImg: function($image) {
+        $image.css({
+            'position': 'absolute',
+            'display': 'none',
+            'z-index': '1'
+        });
 
-AccordionizeSlide.prototype.createImg = function() {
-  var $image = $('<img />', {
-    'alt': this.alt,
-    'src': this.src
-  });
-
-  $image = this.addCssImg($image);
-  return $image;
-},
-
-AccordionizeSlide.prototype.addCssImg = function($image) {
-  $image.css({
-    'position': 'absolute',
-    'display': 'none',
-    'z-index': '1'
-  });
-
-  return $image;
-}
+      return $image;
+    }
+};
