@@ -45,7 +45,7 @@ Accordionize.prototype.createPluginDOMTree = function() {
 
   this.paintOnCanvas();
   this.setEvents();
-}
+};
 
 Accordionize.prototype.convertImgToPluginSlide = function(imgArray) {
   for (var index in imgArray) {
