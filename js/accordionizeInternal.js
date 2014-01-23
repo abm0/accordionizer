@@ -15,7 +15,7 @@ Accordionize.prototype.createOptions = function(options) {
 };
 
 Accordionize.prototype.getDefaultOptions = function() {
-  var defaultOptions = {
+  return {
     tabWidth: 80,
     scroll: {
       timeout: 7000,
@@ -24,8 +24,6 @@ Accordionize.prototype.getDefaultOptions = function() {
     autostart: true,
     bannerItem: 'banner-item'
   };
-
-  return defaultOptions;
 };
 
 Accordionize.prototype.createPluginDOMTree = function() {
@@ -105,10 +103,7 @@ Accordionize.prototype.grayscale = function(imageData) {
 };
 
 Accordionize.prototype.getSlideWidth = function() {
-  var slideWidth = this.$pluginContainer.width() -
-    (this.pluginOptions.tabWidth + 1) * (this.slides.length - 1) - 1;
-
-  return slideWidth;
+  return this.$pluginContainer.width() - (this.pluginOptions.tabWidth + 1) * (this.slides.length - 1) - 1;
 };
 
 Accordionize.prototype.setEvents = function() {

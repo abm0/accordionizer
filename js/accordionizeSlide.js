@@ -17,21 +17,17 @@ AccordionizeSlide.prototype.getWrapper = function() {
 };
 
 AccordionizeSlide.prototype.createDivOverlay = function() {
-  var $overlay = $('<div />', {
+  return $('<div />', {
     'class': this.bannerItem + '-overlay',
     html: this.alt
   });
-
-  return $overlay;
 };
 
 AccordionizeSlide.prototype.createLabel = function() {
-  var $label = $('<div />', {
+  return $('<div />', {
     'class': this.bannerItem + '-label',
     html: this.alt
   });
-
-  return $label;
 };
 
 AccordionizeSlide.prototype.createImg = function() {
