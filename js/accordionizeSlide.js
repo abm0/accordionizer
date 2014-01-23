@@ -4,7 +4,7 @@ function AccordionizeSlide(properties) {
 
 AccordionizeSlide.prototype.getWrapper = function() {
   var $wrapper = $('<div />', {
-    'class': this.banerItem,
+    'class': this.bannerItem,
     'data-title': this.alt
   });
 
@@ -18,7 +18,7 @@ AccordionizeSlide.prototype.getWrapper = function() {
 
 AccordionizeSlide.prototype.createDivOverlay = function() {
   var $overlay = $('<div />', {
-    'class': this.banerItem + '-overlay',
+    'class': this.bannerItem + '-overlay',
     html: this.alt
   });
 
@@ -27,7 +27,7 @@ AccordionizeSlide.prototype.createDivOverlay = function() {
 
 AccordionizeSlide.prototype.createLabel = function() {
   var $label = $('<div />', {
-    'class': this.banerItem + '-label',
+    'class': this.bannerItem + '-label',
     html: this.alt
   });
 

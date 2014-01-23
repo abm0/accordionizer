@@ -12,8 +12,8 @@ loadScript("/js/accordionizeApi.js");
 loadScript("/js/accordionizeInternal.js");
 
 function Accordionize($container, options) {
-  this.$plaginContainer = $container;
-  this.plaginOptions = {};
+  this.$pluginContainer = $container;
+  this.pluginOptions = {};
   this.slides = [];
   this.currentSlide = 0;
 

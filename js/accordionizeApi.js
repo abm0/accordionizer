@@ -1,5 +1,5 @@
 Accordionize.prototype.start = function() {
-  this.$plaginContainer
+  this.$pluginContainer
     .children('.banner-item')
     .first()
     .trigger('mousedown');

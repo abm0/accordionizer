@@ -2,8 +2,8 @@ loadScript("/js/accordionizeSlide.js");
 
 Accordionize.prototype.initPlugin = function(options) {
   this.createOptions(options);
-  this.createPlaginDomTree();
-  if (this.plaginOptions.autostart) {
+  this.createPluginDOMTree();
+  if (this.pluginOptions.autostart) {
     this.start();
   }
 }
@@ -11,7 +11,7 @@ Accordionize.prototype.initPlugin = function(options) {
 Accordionize.prototype.createOptions = function(options) {
   var defaultOptions = this.getDefaultOptions();
 
-  this.plaginOptions = $.extend(defaultOptions, options);
+  this.pluginOptions = $.extend(defaultOptions, options);
 }
 
 Accordionize.prototype.getDefaultOptions = function() {
@@ -22,14 +22,14 @@ Accordionize.prototype.getDefaultOptions = function() {
       auto: true
     },
     autostart: true,
-    banerItem: 'banner-item'
+    bannerItem: 'banner-item'
   };
 
   return defaultOptions;
 }
 
-Accordionize.prototype.createPlaginDomTree = function() {
-  var $objImages = this.$plaginContainer.find('img');
+Accordionize.prototype.createPluginDOMTree = function() {
+  var $objImages = this.$pluginContainer.find('img');
   var imgArray = $objImages.toArray();
 
   this.convertImgToPluginSlide(imgArray);
@@ -40,7 +40,7 @@ Accordionize.prototype.createPlaginDomTree = function() {
     var slide = this.slides[index];
 
     var $wrapper = slide.getWrapper();
-    this.$plaginContainer.append($wrapper);
+    this.$pluginContainer.append($wrapper);
   }
 
   this.paintOnCanvas();
@@ -54,7 +54,7 @@ Accordionize.prototype.convertImgToPluginSlide = function(imgArray) {
       tagName: $img.prop('tagName'),
       src: $img.attr('src'),
       alt: $img.attr('alt'),
-      banerItem: this.plaginOptions.banerItem
+      bannerItem: this.pluginOptions.bannerItem
     });
 
     this.slides.push(accordionizeSlide);
@@ -63,7 +63,7 @@ Accordionize.prototype.convertImgToPluginSlide = function(imgArray) {
 
 
 Accordionize.prototype.paintOnCanvas = function() {
-  var $images = this.$plaginContainer.find('img');
+  var $images = this.$pluginContainer.find('img');
 
   for (var i = 0; i < $images.length; i++) {
     var $image = $($images[i]);
@@ -105,14 +105,14 @@ Accordionize.prototype.grayscale = function(imageData) {
 }
 
 Accordionize.prototype.getSlideWidth = function() {
-  var slideWidth = this.$plaginContainer.width() -
-    (this.plaginOptions.tabWidth + 1) * (this.slides.length - 1) - 1;
+  var slideWidth = this.$pluginContainer.width() -
+    (this.pluginOptions.tabWidth + 1) * (this.slides.length - 1) - 1;
 
   return slideWidth;
 }
 
 Accordionize.prototype.setEvents = function() {
-  var $elements = this.$plaginContainer.find('.banner-item'),
+  var $elements = this.$pluginContainer.find('.banner-item'),
       slideWidth = this.getSlideWidth();
 
   var _this = this;
@@ -122,8 +122,8 @@ Accordionize.prototype.setEvents = function() {
     $element.on('mousedown', function() {
       var $this = $(this);
       if (!$this.is('.active')) {
-        if (_this.$plaginContainer.attr('data-animated') != 'true') {
-          _this.$plaginContainer.attr('data-animated', 'true');
+        if (_this.$pluginContainer.attr('data-animated') != 'true') {
+          _this.$pluginContainer.attr('data-animated', 'true');
           _this.wrap(_this, $this.siblings('.active'));
           _this.unwrap(_this, $this, slideWidth);
           _this.setLoop(_this);
@@ -136,13 +136,13 @@ Accordionize.prototype.setEvents = function() {
 }
 
 Accordionize.prototype.setLoop = function(_this) {
-  if (this.plaginOptions.scroll.auto) {
+  if (this.pluginOptions.scroll.auto) {
     clearInterval(window.interval);
 
     window.interval = setInterval(function() {
-      var $activeElement = _this.$plaginContainer.children('.active');
+      var $activeElement = _this.$pluginContainer.children('.active');
       if($activeElement.is(':last-child')) {
-        _this.$plaginContainer
+        _this.$pluginContainer
           .children('.banner-item:first-child')
           .trigger('mousedown');
       } else {
@@ -150,7 +150,7 @@ Accordionize.prototype.setLoop = function(_this) {
           .next()
           .trigger('mousedown');
       }
-    }, _this.plaginOptions.scroll.timeout);
+    }, _this.pluginOptions.scroll.timeout);
   }
 }
 
@@ -171,7 +171,7 @@ Accordionize.prototype.unwrap = function(_this, $slide, slideWidth) {
 
 Accordionize.prototype.wrap = function(_this, $slide) {
   setTimeout(function() {
-    _this.setDataForAnimate(_this, $slide, _this.plaginOptions.tabWidth);
+    _this.setDataForAnimate(_this, $slide, _this.pluginOptions.tabWidth);
     $slide.removeClass('active');
 
     setTimeout(function() {
@@ -186,7 +186,7 @@ Accordionize.prototype.wrap = function(_this, $slide) {
 
 Accordionize.prototype.setDataForAnimate = function(_this, $slide, width) {
   $slide.animate({ 'width': width + 'px' }, 400, function() {
-    _this.$plaginContainer.attr('data-animated', 'false');
+    _this.$pluginContainer.attr('data-animated', 'false');
   });
 }
 
