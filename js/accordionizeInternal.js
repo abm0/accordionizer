@@ -6,13 +6,13 @@ Accordionize.prototype.initPlugin = function(options) {
   if (this.pluginOptions.autostart) {
     this.start();
   }
-}
+};
 
 Accordionize.prototype.createOptions = function(options) {
   var defaultOptions = this.getDefaultOptions();
 
   this.pluginOptions = $.extend(defaultOptions, options);
-}
+};
 
 Accordionize.prototype.getDefaultOptions = function() {
   var defaultOptions = {
@@ -26,7 +26,7 @@ Accordionize.prototype.getDefaultOptions = function() {
   };
 
   return defaultOptions;
-}
+};
 
 Accordionize.prototype.createPluginDOMTree = function() {
   var $objImages = this.$pluginContainer.find('img');
@@ -59,7 +59,7 @@ Accordionize.prototype.convertImgToPluginSlide = function(imgArray) {
 
     this.slides.push(accordionizeSlide);
   }
-}
+};
 
 
 Accordionize.prototype.paintOnCanvas = function() {
@@ -81,7 +81,7 @@ Accordionize.prototype.paintOnCanvas = function() {
     context.putImageData(imageData, 0, 0);
     $canvas.insertAfter($image);
   }
-}
+};
 
 Accordionize.prototype.getCanvas = function(imgWidth, imgHeight, imgName) {
   var $canvas = $('<canvas />');
@@ -94,7 +94,7 @@ Accordionize.prototype.getCanvas = function(imgWidth, imgHeight, imgName) {
     position: 'absolute'
   });
   return $canvas;
-}
+};
 
 Accordionize.prototype.grayscale = function(imageData) {
   var pix = imageData.data;
@@ -102,14 +102,14 @@ Accordionize.prototype.grayscale = function(imageData) {
     var grayscale = pix[i] * .3 + pix[i + 1] * .59 + pix[i + 2] * .11;
     pix[i] = pix[i + 1] = pix[i + 2] = grayscale;
   }
-}
+};
 
 Accordionize.prototype.getSlideWidth = function() {
   var slideWidth = this.$pluginContainer.width() -
     (this.pluginOptions.tabWidth + 1) * (this.slides.length - 1) - 1;
 
   return slideWidth;
-}
+};
 
 Accordionize.prototype.setEvents = function() {
   var $elements = this.$pluginContainer.find('.banner-item'),
@@ -133,7 +133,7 @@ Accordionize.prototype.setEvents = function() {
       }
     });
   }
-}
+};
 
 Accordionize.prototype.setLoop = function(_this) {
   if (this.pluginOptions.scroll.auto) {
@@ -152,7 +152,7 @@ Accordionize.prototype.setLoop = function(_this) {
       }
     }, _this.pluginOptions.scroll.timeout);
   }
-}
+};
 
 Accordionize.prototype.unwrap = function(_this, $slide, slideWidth) {
   setTimeout(function() {
@@ -167,7 +167,7 @@ Accordionize.prototype.unwrap = function(_this, $slide, slideWidth) {
       _this.fadeInElementsForUnwrap($slide);
     }, 400)
   }, 300);
-}
+};
 
 Accordionize.prototype.wrap = function(_this, $slide) {
   setTimeout(function() {
@@ -182,13 +182,13 @@ Accordionize.prototype.wrap = function(_this, $slide) {
   $slide
     .find('.banner-item-label')
     .fadeOut(300);
-}
+};
 
 Accordionize.prototype.setDataForAnimate = function(_this, $slide, width) {
   $slide.animate({ 'width': width + 'px' }, 400, function() {
     _this.$pluginContainer.attr('data-animated', 'false');
   });
-}
+};
 
 Accordionize.prototype.fadeInElementsForUnwrap = function($slide) {
   $slide
@@ -197,7 +197,7 @@ Accordionize.prototype.fadeInElementsForUnwrap = function($slide) {
   $slide
     .find('img')
     .fadeIn(300);
-}
+};
 
 Accordionize.prototype.fadeInElementsForWrap = function($slide) {
   $slide
@@ -206,4 +206,4 @@ Accordionize.prototype.fadeInElementsForWrap = function($slide) {
   $slide
     .find('.banner-item-overlay')
     .fadeIn(400);
-}
+};

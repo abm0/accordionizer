@@ -14,7 +14,7 @@ AccordionizeSlide.prototype.getWrapper = function() {
     .append(this.createImg());
 
   return $wrapper;
-}
+};
 
 AccordionizeSlide.prototype.createDivOverlay = function() {
   var $overlay = $('<div />', {
@@ -23,7 +23,7 @@ AccordionizeSlide.prototype.createDivOverlay = function() {
   });
 
   return $overlay;
-}
+};
 
 AccordionizeSlide.prototype.createLabel = function() {
   var $label = $('<div />', {
@@ -32,7 +32,7 @@ AccordionizeSlide.prototype.createLabel = function() {
   });
 
   return $label;
-},
+};
 
 AccordionizeSlide.prototype.createImg = function() {
   var $image = $('<img />', {
@@ -42,7 +42,7 @@ AccordionizeSlide.prototype.createImg = function() {
 
   $image = this.addCssImg($image);
   return $image;
-},
+};
 
 AccordionizeSlide.prototype.addCssImg = function($image) {
   $image.css({
@@ -52,4 +52,4 @@ AccordionizeSlide.prototype.addCssImg = function($image) {
   });
 
   return $image;
-}
+};
