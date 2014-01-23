@@ -1,51 +1,50 @@
-function AccordionizeSlide(properties) {
+AccordionizeSlide = function (properties) {
   $.extend(this, properties);
-}
-
-AccordionizeSlide.prototype.getWrapper = function() {
-  var $wrapper = $('<div />', {
-    'class': this.bannerItem,
-    'data-title': this.alt
-  });
-
-  $wrapper
-    .append(this.createDivOverlay())
-    .append(this.createLabel())
-    .append(this.createImg());
-
-  return $wrapper;
 };
 
-AccordionizeSlide.prototype.createDivOverlay = function() {
-  return $('<div />', {
-    'class': this.bannerItem + '-overlay',
-    html: this.alt
-  });
-};
+AccordionizeSlide.prototype = {
 
-AccordionizeSlide.prototype.createLabel = function() {
-  return $('<div />', {
-    'class': this.bannerItem + '-label',
-    html: this.alt
-  });
-};
+    getWrapper: function() {
+        return $('<div />', {
+                'class': this.bannerItem,
+                'data-title': this.alt
+            })
+            .append(this.createDivOverlay())
+            .append(this.createLabel())
+            .append(this.createImg());
+    },
 
-AccordionizeSlide.prototype.createImg = function() {
-  var $image = $('<img />', {
-    'alt': this.alt,
-    'src': this.src
-  });
+    createDivOverlay: function() {
+        return $('<div />', {
+            'class': this.bannerItem + '-overlay',
+            html: this.alt
+        });
+    },
 
-  $image = this.addCssImg($image);
-  return $image;
-};
+    createLabel: function() {
+        return $('<div />', {
+            'class': this.bannerItem + '-label',
+            html: this.alt
+        });
+    },
 
-AccordionizeSlide.prototype.addCssImg = function($image) {
-  $image.css({
-    'position': 'absolute',
-    'display': 'none',
-    'z-index': '1'
-  });
+    createImg: function() {
+        var $image = $('<img />', {
+            'alt': this.alt,
+            'src': this.src
+        });
 
-  return $image;
+        $image = this.addCssImg($image);
+        return $image;
+    },
+
+    addCssImg: function($image) {
+        $image.css({
+            'position': 'absolute',
+            'display': 'none',
+            'z-index': '1'
+        });
+
+      return $image;
+    }
 };
