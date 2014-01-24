@@ -131,10 +131,10 @@ Accordionize.prototype.setEvents = function() {
 };
 
 Accordionize.prototype.setLoop = function(_this) {
-  if (this.pluginOptions.scroll.auto) {
-    clearInterval(window.interval);
+  if (_this.pluginOptions.scroll.auto) {
+    clearInterval(_this._loop);
 
-    window.interval = setInterval(function() {
+    _this._loop = setInterval(function() {
       var $activeElement = _this.$pluginContainer.children('.active');
       if($activeElement.is(':last-child')) {
         _this.$pluginContainer
