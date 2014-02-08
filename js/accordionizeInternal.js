@@ -41,7 +41,6 @@ Accordionize.prototype.createPluginDOMTree = function() {
     this.$pluginContainer.append($wrapper);
   }
 
-  this.paintOnCanvas();
   this.setEvents();
 };
 
@@ -52,46 +51,12 @@ Accordionize.prototype.convertImgToPluginSlide = function(imgArray) {
       tagName: $img.prop('tagName'),
       src: $img.attr('src'),
       alt: $img.attr('alt'),
-      bannerItem: this.pluginOptions.bannerItem
+      bannerItem: this.pluginOptions.bannerItem,
+      parent: this
     });
 
     this.slides.push(accordionizeSlide);
   }
-};
-
-
-Accordionize.prototype.paintOnCanvas = function() {
-  var $images = this.$pluginContainer.find('img');
-
-  for (var i = 0; i < $images.length; i++) {
-    var $image = $($images[i]),
-        imgWidth = $image.width(),
-        imgHeight = $image.height(),
-        imgName = $image.attr('alt'),
-        $canvas = this.getCanvas(imgWidth, imgHeight, imgName),
-        context = $canvas.get(0).getContext('2d');
-
-    context.drawImage($image.get(0), 0, 0);
-
-    var imageData = context.getImageData(0, 0, imgWidth, imgHeight);
-    this.grayscale(imageData);
-
-    context.putImageData(imageData, 0, 0);
-    $canvas.insertAfter($image);
-  }
-};
-
-Accordionize.prototype.getCanvas = function(imgWidth, imgHeight, imgName) {
-  var $canvas = $('<canvas />');
-  $canvas.attr({
-    width: imgWidth,
-    height: imgHeight,
-    'data-rel': imgName
-  });
-  $canvas.css({
-    position: 'absolute'
-  });
-  return $canvas;
 };
 
 Accordionize.prototype.grayscale = function(imageData) {
@@ -108,7 +73,7 @@ Accordionize.prototype.getSlideWidth = function() {
 
 Accordionize.prototype.setEvents = function() {
   var $elements = this.$pluginContainer.find('.banner-item'),
-      slideWidth = this.getSlideWidth();
+    slideWidth = this.getSlideWidth();
 
   var _this = this;
   for (var i = 0; i < $elements.length; i++) {
@@ -131,10 +96,10 @@ Accordionize.prototype.setEvents = function() {
 };
 
 Accordionize.prototype.setLoop = function(_this) {
-  if (_this.pluginOptions.scroll.auto) {
-    clearInterval(_this._loop);
+  if (this.pluginOptions.scroll.auto) {
+    clearInterval(window.interval);
 
-    _this._loop = setInterval(function() {
+    window.interval = setInterval(function() {
       var $activeElement = _this.$pluginContainer.children('.active');
       if($activeElement.is(':last-child')) {
         _this.$pluginContainer
