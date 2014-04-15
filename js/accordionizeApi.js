@@ -1,34 +1,36 @@
-Accordionize.prototype.start = function() {
-  this.$pluginContainer
-    .children('.banner-item')
-    .first()
-    .trigger('mousedown');
-};
+Accordionize.prototype = {
+  start = function() {
+    this.$pluginContainer
+      .children('.banner-item')
+      .first()
+      .trigger('mousedown');
+  },
 
-Accordionize.prototype.stop = function() {
-};
+  stop = function() {
+  },
 
-Accordionize.prototype.next = function() {
-};
+  next = function() {
+  },
 
-Accordionize.prototype.prev = function() {
-};
+  prev = function() {
+  },
 
-Accordionize.prototype.getSlideId = function() {
-};
+  getSlideId = function() {
+  },
 
-Accordionize.prototype.geSlideCount = function() {
-};
+  geSlideCount = function() {
+  },
 
-Accordionize.prototype.moveToSlide = function(id) {
-};
+  moveToSlide = function(id) {
+  },
 
-Accordionize.prototype.removeSlide = function(id) {
-};
+  removeSlide = function(id) {
+  },
 
-Accordionize.prototype.addSlide = function($img) {
-};
+  addSlide = function($img) {
+  },
 
-Accordionize.prototype.setOptions = function(options) {
-  this.createOptions(options);
-};
+  setOptions = function(options) {
+    this.createOptions(options);
+  }
+}
