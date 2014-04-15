@@ -33,4 +33,4 @@ Accordionize.prototype = {
   setOptions = function(options) {
     this.createOptions(options);
   }
-}
+};
