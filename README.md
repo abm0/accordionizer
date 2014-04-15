@@ -1,3 +1,6 @@
+## accordionizer
+[![Code Climate](https://codeclimate.com/github/i-dranichnikov/accordionizer.png)](https://codeclimate.com/github/i-dranichnikov/accordionizer)
+
 ## Usage
 Create simple div container, and fill it with img tags.
 Specifying the tag attributes: src and alt.
